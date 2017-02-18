@@ -19,8 +19,8 @@ feature 'Create question', %q{
     click_on 'Create'
 
     expect(page).to have_content 'Your question was successfully created'
-    # TODO check question content, page....
-    # expect(current_path).to eq questions_path
+    expect(page).to have_content 'My awesome question'
+    expect(page).to have_content 'test'
   end
 
   scenario 'Non-athenticated user creates a question' do
