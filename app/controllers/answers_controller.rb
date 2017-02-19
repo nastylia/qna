@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, only: [:create]
   def index
     @answers = Answer.where(question_id: params[:question_id])
   end
@@ -11,7 +12,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     if @answer.save
-      redirect_to @answer
+      redirect_to @question
     else
       render :new
     end

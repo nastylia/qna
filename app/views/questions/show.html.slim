@@ -1,2 +1,12 @@
 p Question name: #{@question.title}
 p Question body: #{@question.body}
+
+- if @answers.any?
+  - @answers.each do |a|
+    p #{a.body}
+
+p Your answer:
+= form_for [@question, @answer] do |f|
+  = f.label :body
+  = f.text_area :body
+  = f.submit 'Post Your Answer'
