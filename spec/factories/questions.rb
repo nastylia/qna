@@ -16,7 +16,7 @@ FactoryGirl.define do
   factory :question_author, class: Question do
     title
     body
-    user
+    association :author, factory: :user
   end
 
   factory :invalid_question, class: Question do
