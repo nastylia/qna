@@ -13,6 +13,12 @@ FactoryGirl.define do
     body
   end
 
+  factory :question_author, class: Question do
+    title
+    body
+    user
+  end
+
   factory :invalid_question, class: Question do
     title nil
     body nil
