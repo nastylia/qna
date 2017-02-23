@@ -1,4 +1,5 @@
-p= link_to 'Delete question', question_path(@question), method: :delete
+- if current_user.id == @question.author_id
+  p= link_to 'Delete question', question_path(@question), method: :delete
 
 p Question name: #{@question.title}
 p Question body: #{@question.body}

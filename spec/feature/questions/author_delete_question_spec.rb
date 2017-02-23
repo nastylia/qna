@@ -28,6 +28,9 @@ feature 'Author can delete it\'s questions', %q{
   end
 
   scenario 'Non-question-author cannot delete others questions' do
+    sign_in(author1)
 
+    visit question_path(question_author2)
+    expect(page).to_not have_content 'Delete question'
   end
 end
