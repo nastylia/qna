@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show]
+  before_action :load_question, only: [:show, :destroy]
   
   def index
     @questions = Question.all
@@ -25,6 +25,11 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def destroy
+    @question.destroy
+    redirect_to questions_path
+  end
+
   private
 
   def load_question
@@ -32,6 +37,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :author_id)
   end
 end
