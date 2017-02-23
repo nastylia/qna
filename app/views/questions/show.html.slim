@@ -1,4 +1,4 @@
-- if current_user.id == @question.author_id
+- if user_signed_in? && current_user.id == @question.author_id
   p= link_to 'Delete question', question_path(@question), method: :delete
 
 p Question name: #{@question.title}
@@ -6,6 +6,8 @@ p Question body: #{@question.body}
 
 - if @answers.any?
   - @answers.each do |a|
+    - if user_signed_in? && current_user.id == a.author_id
+      p= link_to 'Delete answer', answer_path(a), method: :delete
     p #{a.body}
 
 p Your answer:

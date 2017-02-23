@@ -3,7 +3,7 @@ FactoryGirl.define do
   factory :answer do
     body
     question
-    association author, factory: :user
+    association :author, factory: :user
   end
 
   factory :invalid_answer, class: Answer do
