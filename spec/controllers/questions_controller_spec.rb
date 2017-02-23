@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:user) { create(:user) }
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question_author, 2, author: user) }
 
     before do
       get :index
@@ -18,7 +19,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:question) { create(:question) }
+    let(:question) { create(:question_author, author: user) }
 
     before { get :show, id: question }
 
@@ -47,10 +48,13 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:question) { create(:question_author, author: user) }
     context 'with valid attributes' do
       sign_in_user
       it 'saves new question in the db' do
+        binding.pry
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        # expect { post :create, params: { question: attributes_for(:question), author_id: user } }.to change(Question, :count).by(1)
       end
       it 'redirects to show view' do
         post :create, question: attributes_for(:question)
@@ -68,6 +72,17 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, question: attributes_for(:invalid_question)
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    it 'deletes question' do
+      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    end
+
+    it 'redirect to index view' do
+      delete :destroy, id: question
+      expect(response).to redirect_to questions_path
     end
   end
 end
