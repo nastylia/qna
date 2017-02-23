@@ -7,7 +7,7 @@ feature 'List questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:questions, 3) }
+  given!(:questions) { create_list(:question_author, 3, author: user) }
 
   scenario 'Authenticated user browse questions' do
 

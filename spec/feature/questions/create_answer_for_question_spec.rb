@@ -7,7 +7,7 @@ feature 'Create answer for a question', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:question) { create(:question) }
+  given!(:question) { create(:question_author, author: user) }
 
   scenario 'Authenticated user answers the question' do
     sign_in(user)

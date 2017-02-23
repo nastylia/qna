@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question_author, author: user) }
 
   describe 'GET #index' do
     let(:answers) { create_list(:answer, 2, question: question) }
