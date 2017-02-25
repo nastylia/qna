@@ -21,6 +21,18 @@ feature 'Create answer for a question', %q{
 
   end
 
+  scenario 'Authenticated user creates invalid answer' do
+    sign_in(user)
+
+    visit question_path(question)
+    fill_in 'Body', with: ''
+    click_on 'Post Your Answer'
+
+    save_and_open_page()
+
+    expect(page).to have_content 'Cannot save Answer:'
+  end
+
   scenario 'Non-authenticated user answers the question' do
     visit question_path(question)
     fill_in 'Body', with: 'Awesome answer'

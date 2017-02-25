@@ -8,18 +8,20 @@ class AnswersController < ApplicationController
     @answer.author_id = current_user.id
     unless @answer.save
       flash[:notice] = 'Answer was not saved'
+      # render :"question/show"
+      # render :template => 'questions/show'
+    else
+      redirect_to @question
     end
-    redirect_to @question
   end
 
   def destroy
-    # binding.pry
     @question = @answer.question
-    if user_signed_in? && current_user.id == @answer.author_id
+    if User.author_of? current_user, @answer
       @answer.destroy
       flash[:notice] = 'Answer was successfully deleted'
     else
-      flash[:notice] = 'You are not authorized to delete question'
+      flash[:notice] = 'You are not authorized to delete answer'
     end
     redirect_to @question
   end
@@ -31,6 +33,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :author_id)
+    params.require(:answer).permit(:body)
   end
 end

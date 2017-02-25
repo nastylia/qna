@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create(:question_author, author: user) }
+  let(:question) { create(:question_author, author: @user) }
   describe 'GET #index' do
     let(:questions) { create_list(:question_author, 2, author: user) }
 
@@ -20,8 +20,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    # let(:question) { create(:question_author, author: user) }
-
+    let(:question) { create(:question_author, author: user) }
+    
     before { get :show, id: question }
 
     it 'assigns the requested question to @question' do
@@ -52,10 +52,13 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       sign_in_user
       it 'saves new question in the db' do
-        expect { post :create, params: { question: attributes_for(:question_author, author_id: user.id) } }.to change(Question, :count).by(1)
+        expect { post :create, params: { question: attributes_for(:question_author) } }.to change(Question, :count).by(1)
+      end
+      it 'saves new question under logged in user' do
+        expect { post :create, params: { question: attributes_for(:question_author) } }.to change(@user.questions, :count).by(1)
       end
       it 'redirects to show view' do
-        post :create, params: { question: attributes_for(:question_author, author_id: user.id) }
+        post :create, params: { question: attributes_for(:question_author) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
@@ -74,15 +77,30 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
-    it 'deletes question' do
-      question
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    context 'signed in user is an author' do
+      sign_in_user
+      it 'deletes question' do
+        question
+        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to index view' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'signed in user is not an author' do
+      let(:question) { create(:question, author: user) }
+      sign_in_user
+      it 'cannot delete question' do
+        question
+        expect { delete :destroy, id: question }.to change(Question, :count).by(0)
+      end
+      it 'redirects to index view' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end

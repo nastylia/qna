@@ -1,4 +1,5 @@
 = form_for @question do |f|
+  = render 'common/errors', resource: @question
   = f.label :title
   = f.text_field :title
   = f.label :body

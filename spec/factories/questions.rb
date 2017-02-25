@@ -8,11 +8,6 @@ FactoryGirl.define do
     "Test test #{n}"
   end
 
-  factory :questions, class: Question do
-    title
-    body
-  end
-
   factory :question_author, class: Question do
     title
     body
@@ -24,8 +19,10 @@ FactoryGirl.define do
     body nil
   end
 
-  factory :question do
-    title "MyString"
-    body "MyText"
+  factory :question, class: Question do
+    title
+    body
+    association :author, factory: :user
   end
+
 end

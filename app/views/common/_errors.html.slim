@@ -1,0 +1,8 @@
+- if resource.errors.any?
+  div id='error_explanation'
+    h2= "Cannot save #{resource.class}:"
+    h3= pluralize(resource.errors.count, "error")
+
+    ul
+      - resource.errors.full_messages.each do |message|
+        li= message

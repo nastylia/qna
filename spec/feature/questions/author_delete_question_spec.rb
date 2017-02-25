@@ -33,4 +33,9 @@ feature 'Author can delete it\'s questions', %q{
     visit question_path(question_author2)
     expect(page).to_not have_content 'Delete question'
   end
+
+  scenario 'Not authorized user cannot delete question' do
+    visit question_path(question_author2)
+    expect(page).to_not have_content 'Delete question'
+  end
 end

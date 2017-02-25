@@ -27,8 +27,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    flash[:notice] = 'Question was successfully deleted'
+    if User.author_of? current_user, @question
+      @question.destroy
+      flash[:notice] = 'Question was successfully deleted'
+    else
+      flash[:notice] = 'You are not authorized to delete question'
+    end
     redirect_to questions_path
   end
 
@@ -39,6 +43,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :author_id)
+    params.require(:question).permit(:title, :body)
   end
 end

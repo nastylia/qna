@@ -23,6 +23,20 @@ feature 'Create question', %q{
     expect(page).to have_content 'test'
   end
 
+  scenario 'Authenticated user creates invalid question' do
+    sign_in(user)
+
+    visit questions_path
+    click_on 'Ask question'
+
+    fill_in 'Title', with: ''
+    fill_in 'Body', with: ''
+    click_on 'Create'
+
+    expect(page).to have_content 'Cannot save Question:'
+
+  end
+
   scenario 'Non-athenticated user creates a question' do
     visit questions_path
     click_on 'Ask question'
