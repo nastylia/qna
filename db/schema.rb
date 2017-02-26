@@ -30,8 +30,10 @@ ActiveRecord::Schema.define(version: 20170223220107) do
     t.text     "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "users_id"
     t.integer  "author_id"
     t.index ["author_id"], name: "index_questions_on_author_id", using: :btree
+    t.index ["users_id"], name: "index_questions_on_users_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -54,4 +56,5 @@ ActiveRecord::Schema.define(version: 20170223220107) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users", column: "author_id"
   add_foreign_key "questions", "users", column: "author_id"
+  add_foreign_key "questions", "users", column: "users_id"
 end

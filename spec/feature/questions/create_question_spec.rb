@@ -34,6 +34,8 @@ feature 'Create question', %q{
     click_on 'Create'
 
     expect(page).to have_content 'Cannot save Question:'
+    expect(page).to have_content 'Title can\'t be blank'
+    expect(page).to have_content 'Body can\'t be blank'
 
   end
 

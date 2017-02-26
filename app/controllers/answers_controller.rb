@@ -1,23 +1,24 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!
   before_action :load_answer, only: [:destroy]
 
   def create
     @question = Question.find(params[:question_id])
+    @answers = @question.answers
     @answer = @question.answers.new(answer_params)
     @answer.author_id = current_user.id
-    unless @answer.save
-      flash[:notice] = 'Answer was not saved'
-      # render :"question/show"
-      # render :template => 'questions/show'
-    else
+    if @answer.save
       redirect_to @question
+    else
+      @answers.reload
+      flash[:notice] = 'Answer was not saved'
+      render 'questions/show'
     end
   end
 
   def destroy
     @question = @answer.question
-    if User.author_of? current_user, @answer
+    if user_signed_in? && current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = 'Answer was successfully deleted'
     else

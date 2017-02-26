@@ -95,7 +95,7 @@ RSpec.describe QuestionsController, type: :controller do
       sign_in_user
       it 'cannot delete question' do
         question
-        expect { delete :destroy, id: question }.to change(Question, :count).by(0)
+        expect { delete :destroy, id: question }.to_not change(Question, :count)
       end
       it 'redirects to index view' do
         delete :destroy, id: question

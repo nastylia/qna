@@ -6,9 +6,6 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       sign_in_user
-      it 'saves new answer in db' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(Answer, :count).by(1)
-      end
 
       it 'saves new answer under our question' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
@@ -31,7 +28,7 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 're-directs to question show view' do
         post :create, params: { answer: attributes_for(:invalid_answer), question_id: question }
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to render_template 'questions/show'
       end
     end
   end
@@ -56,7 +53,7 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
       it 'cannot delete answer' do
         answer
-        expect { delete :destroy, id: answer }.to change(Answer, :count).by(0)
+        expect { delete :destroy, id: answer }.to_not change(Answer, :count)
       end
       it 'redirects to question show view' do
         delete :destroy, id: answer

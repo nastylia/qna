@@ -1,4 +1,4 @@
-require 'rails_helper'
+                                          require 'rails_helper'
 
 feature 'Author can delete it\'s questions', %q{
   In order to delete questions
@@ -18,6 +18,8 @@ feature 'Author can delete it\'s questions', %q{
     sign_in(author1)
 
     visit question_path(question_author1)
+
+    expect(page).to have_content question_author1.title
     click_on 'Delete question'
 
     expect(page).to have_content 'Question was successfully deleted'

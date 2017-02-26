@@ -28,9 +28,8 @@ feature 'Create answer for a question', %q{
     fill_in 'Body', with: ''
     click_on 'Post Your Answer'
 
-    save_and_open_page()
-
     expect(page).to have_content 'Cannot save Answer:'
+    expect(page).to have_content 'Body can\'t be blank'
   end
 
   scenario 'Non-authenticated user answers the question' do

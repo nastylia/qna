@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :questions, foreign_key: :author_id
   has_many :answers, foreign_key: :author_id
 
-  def self.author_of?(user, item)
-    user && user.id == item.author_id
+  def author_of?(item)
+    id == item.author_id
   end
 end

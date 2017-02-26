@@ -16,6 +16,8 @@ feature 'Author can delete it\'s answers', %q{
     sign_in(author1)
 
     visit question_path(question_author2)
+
+    expect(page).to have_content answers_author1.body
     click_on 'Delete answer'
 
     expect(page).to have_content 'Answer was successfully deleted'
