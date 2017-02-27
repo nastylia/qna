@@ -1,23 +1,37 @@
 class AnswersController < ApplicationController
-  def index
-    @answers = Answer.where(question_id: params[:question_id])
-  end
-
-  def new
-    @answer = Answer.new
-  end
+  before_action :authenticate_user!
+  before_action :load_answer, only: [:destroy]
 
   def create
     @question = Question.find(params[:question_id])
+    @answers = @question.answers
     @answer = @question.answers.new(answer_params)
+    @answer.author_id = current_user.id
     if @answer.save
-      redirect_to @answer
+      redirect_to @question
     else
-      render :new
+      @answers.reload
+      flash[:notice] = 'Answer was not saved'
+      render 'questions/show'
     end
   end
 
+  def destroy
+    @question = @answer.question
+    if user_signed_in? && current_user.author_of?(@answer)
+      @answer.destroy
+      flash[:notice] = 'Answer was successfully deleted'
+    else
+      flash[:notice] = 'You are not authorized to delete answer'
+    end
+    redirect_to @question
+  end
+
   private
+
+  def load_answer
+    @answer = Answer.find(params[:id])
+  end
 
   def answer_params
     params.require(:answer).permit(:body)
