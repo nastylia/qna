@@ -9,7 +9,7 @@ class AnswersController < ApplicationController
     unless @answer.save
       @question.reload
       flash[:notice] = 'Answer was not saved'
-      render 'questions/show'
+      # render 'questions/show'
     end
   end
 

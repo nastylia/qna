@@ -24,8 +24,9 @@ feature 'Create answer for a question', %q{
 
   end
 
-  scenario 'Authenticated user creates invalid answer' do
+  scenario 'Authenticated user creates invalid answer', js: true do
     sign_in(user)
+    sleep(1)
 
     visit question_path(question)
     fill_in 'Body', with: ''
