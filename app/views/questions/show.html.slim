@@ -5,13 +5,10 @@ p Question name: #{@question.title}
 p Question body: #{@question.body}
 
 .answers
-  - @question.answers.each do |a|
-    - if user_signed_in? && current_user.author_of?(a)
-      p= link_to 'Delete answer', answer_path(a), :method => :delete
-    p= a.body
+  = render 'answers'
 
 p Your answer:
-= form_for [@question, @answer] do |f|
+= form_for [@question, @answer], remote: true do |f|
   = render 'common/errors', resource: @answer
   = f.label :body
   = f.text_area :body

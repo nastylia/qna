@@ -6,9 +6,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
-    if @answer.save
-      redirect_to @question
-    else
+    unless @answer.save
       @question.reload
       flash[:notice] = 'Answer was not saved'
       render 'questions/show'

@@ -9,14 +9,15 @@ feature 'Create answer for a question', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question_author, author: user) }
 
-  scenario 'Authenticated user answers the question' do
+  scenario 'Authenticated user answers the question', js: true do
     sign_in(user)
+    sleep(1)
 
     visit question_path(question)
     fill_in 'Body', with: 'Awesome answer'
     click_on 'Post Your Answer'
 
-    within '.answers' do
+    within '.answer' do
       expect(page).to have_content 'Awesome answer'
     end
     expect(current_path).to eq question_path(question)
