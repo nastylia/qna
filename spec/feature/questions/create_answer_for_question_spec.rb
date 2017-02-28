@@ -16,7 +16,9 @@ feature 'Create answer for a question', %q{
     fill_in 'Body', with: 'Awesome answer'
     click_on 'Post Your Answer'
 
-    expect(page).to have_content 'Awesome answer'
+    within '.answers' do
+      expect(page).to have_content 'Awesome answer'
+    end
     expect(current_path).to eq question_path(question)
 
   end
