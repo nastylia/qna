@@ -1,4 +1,0 @@
-- @question.answers.each do |a|
-    - if user_signed_in? && current_user.author_of?(a)
-      p= link_to 'Delete answer', answer_path(a), :method => :delete
-    p= a.body

@@ -4,10 +4,12 @@
 p Question name: #{@question.title}
 p Question body: #{@question.body}
 
+
 .answers
   = render 'answers'
 
 p Your answer:
+#errors
 = form_for [@question, @answer], remote: true do |f|
   = render 'common/errors', resource: @answer
   = f.label :body
