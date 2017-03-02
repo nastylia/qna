@@ -1,0 +1,6 @@
+$('#error_explanation').empty()
+<% if @answer.errors %>
+  $('#new_answer').prepend('<%= render "common/errors", resource: @answer %>')
+<% end %>
+$('.answers').append('<%= j render @answer %>')
+$('#answer_body').val('')

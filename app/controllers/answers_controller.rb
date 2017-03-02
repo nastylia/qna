@@ -4,16 +4,9 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answers = @question.answers
     @answer = @question.answers.new(answer_params)
-    @answer.author_id = current_user.id
-    if @answer.save
-      redirect_to @question
-    else
-      @answers.reload
-      flash[:notice] = 'Answer was not saved'
-      render 'questions/show'
-    end
+    @answer.author = current_user
+    @answer.save
   end
 
   def destroy
