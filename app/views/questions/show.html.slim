@@ -6,7 +6,7 @@ p Question body: #{@question.body}
 
 
 .answers
-  = render 'answers'
+  = render @question.answers
 
 p Your answer:
 #errors
