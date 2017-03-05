@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../feature_helper'
 
 feature 'Author can delete it\'s answers', %q{
   In order to delete answers
