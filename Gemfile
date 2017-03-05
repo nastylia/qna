@@ -46,8 +46,9 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
+
+  gem 'capybara-webkit'
 end
 
 group :test do
