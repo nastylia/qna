@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer, only: [:destroy]
+  before_action :load_answer_and_question, only: [:destroy, :update]
 
   def create
     @question = Question.find(params[:question_id])
@@ -9,8 +9,12 @@ class AnswersController < ApplicationController
     @answer.save
   end
 
+  def update
+    @answer.update(answer_params)
+    redirect_to @question
+  end
+
   def destroy
-    @question = @answer.question
     if user_signed_in? && current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = 'Answer was successfully deleted'
@@ -22,8 +26,9 @@ class AnswersController < ApplicationController
 
   private
 
-  def load_answer
+  def load_answer_and_question
     @answer = Answer.find(params[:id])
+    @question = @answer.question
   end
 
   def answer_params

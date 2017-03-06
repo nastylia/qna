@@ -41,6 +41,7 @@ RSpec.describe AnswersController, type: :controller do
         answer
         expect { delete :destroy, id: answer }.to change(Answer, :count).by(-1)
       end
+
       it 'redirects to question show view' do
         delete :destroy, id: answer
         expect(response).to redirect_to question_path(assigns(:question))
@@ -55,8 +56,66 @@ RSpec.describe AnswersController, type: :controller do
         answer
         expect { delete :destroy, id: answer }.to_not change(Answer, :count)
       end
+
       it 'redirects to question show view' do
         delete :destroy, id: answer
+        expect(response).to redirect_to question_path(assigns(:question))
+      end
+    end
+  end
+
+  describe 'patch #update' do
+    context 'valid attributes' do
+      context 'signed in user is an author' do
+        let(:answer) { create(:answer, question: question, author: @user) }
+        sign_in_user
+        it 'assigns requested answer to @answer' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer)
+          expect(assigns(:answer)).to eq answer
+        end
+
+        it 'changes answer attributes' do
+          patch :update, id: answer, question_id: question, answer: { body: 'new body' }
+          answer.reload
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'redirects to question show view' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer)
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
+      end
+
+      context 'signed in user is not an author' do
+        let(:user) { create(:user) }
+        let(:answer) { create(:answer, question: question, author: user) }
+        sign_in_user
+        it 'cannto edit answer' do
+          answer
+          patch :update, id: answer, question_id: question, answer: { body: 'new body' }
+          answer.reload
+          expect(answer.body).to eq answer.body
+        end
+
+        it 'redirects to question show view' do
+          patch :update, id: answer, question_id: question, answer: attributes_for(:answer)
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
+
+      end
+    end
+
+    context 'invalid attributes' do
+      let(:answer) { create(:answer, question: question, author: @user) }
+      sign_in_user
+      it 'doesn\'t change answer attributes' do
+        patch :update, id: answer, question_id: question, answer: { body: '' }
+        answer.reload
+        expect(answer.body).to eq answer.body
+      end
+
+      it 'rediects to question show view' do
+        patch :update, id: answer, question_id: question, answer: { body: '' }
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
