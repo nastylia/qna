@@ -11,7 +11,6 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params)
-    redirect_to @question
   end
 
   def destroy
