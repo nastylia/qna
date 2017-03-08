@@ -117,7 +117,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'doesn\'t change answer attributes' do
         patch :update, id: answer, question_id: question, answer: { body: '' }, format: 'js'
         answer.reload
-        expect(answer.body).to eq answer.body
+        expect(answer.body).to_not eq ''
       end
 
       it 'renders update view' do
