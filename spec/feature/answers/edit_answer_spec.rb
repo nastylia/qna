@@ -16,7 +16,7 @@ feature 'Answer editing', %q{
     expect(page).to_not have_link 'Edit'
   end
 
-  scenario 'Not author cannot see edit link for other questions' do
+  scenario 'Not author cannot see edit link for other answers' do
     sign_in(user1)
     visit question_path(question)
 

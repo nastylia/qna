@@ -97,9 +97,10 @@ RSpec.describe AnswersController, type: :controller do
         sign_in_user
         it 'cannto edit answer' do
           answer
+          old_body = answer.body
           patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: 'js'
           answer.reload
-          expect(answer.body).to eq answer.body
+          expect(answer.body).to eq old_body
         end
 
         it 'renders update view' do
