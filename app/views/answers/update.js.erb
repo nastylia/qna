@@ -1,5 +1,5 @@
 <% if @answer.errors.present? %>
-  $('#errors').html('<%= j render "common/errors", resource: @answer %>')
+  $('#answer-<%= @answer.id %>').prepend('<%= j render "common/errors", resource: @answer %>')
 <% else %>
-  $('.answers').append('<%= j render @answer %>')
+  $('#answer-<%= @answer.id %>').html('<%= j render @answer %>')
 <% end %>

@@ -20,7 +20,7 @@ feature 'Answer editing', %q{
     sign_in(user1)
     visit question_path(question)
 
-    within '.answer' do
+    within '.answers' do
       expect(page).to_not have_link 'Edit'
     end
   end
@@ -33,14 +33,14 @@ feature 'Answer editing', %q{
     end
 
     scenario 'Only author sees edit link' do
-      within '.answer' do
+      within '.answers' do
         expect(page).to have_link 'Edit'
       end
     end
 
     scenario 'Author tries to edit his answer', js: true do
       click_on 'Edit'
-      within '.answer' do
+      within '.answers' do
         fill_in 'Answer', with: 'edited answer'
         click_on 'Save'
 
@@ -50,7 +50,17 @@ feature 'Answer editing', %q{
       end
     end
 
-    scenario 'Authenticated user tries to edit other user\'s answer'
+    scenario 'Author tries to edit his answer with nothing', js: true do
+      click_on 'Edit'
+      within '.answers' do
+        fill_in 'Answer', with: ''
+        click_on 'Save'
+
+        expect(page).to have_content answer.body
+        expect(page).to have_selector 'textarea'
+        expect(page).to have_content 'Body can\'t be blank'
+      end
+    end
 
   end
 

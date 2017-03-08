@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    # binding.pry
     @answers = @question.answers
     @answer = Answer.new(question_id: @question.id)
   end
