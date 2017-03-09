@@ -1,6 +1,6 @@
 - if user_signed_in? && current_user.author_of?(@question)
   p
-    = link_to 'Delete question', question_path(@question), method: :delete
+    = link_to 'Delete question', question_path(@question), method: :delete, remote: true
     = ', '
     = link_to 'Edit question', '', class: 'edit-question-link'
   p

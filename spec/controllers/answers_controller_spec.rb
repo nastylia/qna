@@ -39,12 +39,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
       it 'deletes answer' do
         answer
-        expect { delete :destroy, id: answer }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, id: answer, format: 'js' }.to change(Answer, :count).by(-1)
       end
 
       it 'redirects to question show view' do
-        delete :destroy, id: answer
-        expect(response).to redirect_to question_path(assigns(:question))
+        delete :destroy, id: answer, format: 'js'
+        expect(response).to render_template :destroy
       end
     end
 
@@ -54,12 +54,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
       it 'cannot delete answer' do
         answer
-        expect { delete :destroy, id: answer }.to_not change(Answer, :count)
+        expect { delete :destroy, id: answer, format: 'js' }.to_not change(Answer, :count)
       end
 
       it 'redirects to question show view' do
-        delete :destroy, id: answer
-        expect(response).to redirect_to question_path(assigns(:question))
+        delete :destroy, id: answer, format: 'js'
+        expect(response).to render_template :destroy
       end
     end
   end

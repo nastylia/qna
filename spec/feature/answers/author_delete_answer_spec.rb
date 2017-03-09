@@ -12,7 +12,7 @@ feature 'Author can delete it\'s answers', %q{
   given!(:answers_author2) { create_list(:answer, 3, question: question_author1, author: author2) }
   given!(:answers_author1) { create(:answer, question: question_author2, author: author1) }
 
-  scenario 'Author can delete it\'s answers' do
+  scenario 'Author can delete it\'s answers', js: true do
     sign_in(author1)
 
     visit question_path(question_author2)
@@ -20,7 +20,6 @@ feature 'Author can delete it\'s answers', %q{
     expect(page).to have_content answers_author1.body
     click_on 'Delete answer'
 
-    expect(page).to have_content 'Answer was successfully deleted'
     expect(current_path).to eq question_path(question_author2)
 
     expect(page).to_not have_content answers_author1.body

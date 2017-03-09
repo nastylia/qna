@@ -14,13 +14,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if user_signed_in? && current_user.author_of?(@answer)
-      @answer.destroy
-      flash[:notice] = 'Answer was successfully deleted'
-    else
-      flash[:notice] = 'You are not authorized to delete answer'
-    end
-    redirect_to @question
+    @answer.destroy if user_signed_in? && current_user.author_of?(@answer)
   end
 
   private
