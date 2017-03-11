@@ -17,9 +17,10 @@ ActiveRecord::Schema.define(version: 20170223220107) do
 
   create_table "answers", force: :cascade do |t|
     t.text     "body"
+    t.boolean  "best_answer", default: false
     t.integer  "question_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "author_id"
     t.index ["author_id"], name: "index_answers_on_author_id", using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
