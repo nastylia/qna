@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer_and_question, only: [:destroy, :update]
+  before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
 
   def create
     @question = Question.find(params[:question_id])
@@ -14,7 +14,16 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy if user_signed_in? && current_user.author_of?(@answer)
+    @answer.destroy if current_user.author_of?(@answer)
+  end
+
+  def mark_best
+    if current_user.author_of?(@question)
+      @question.answers.each do |a|
+        a.update(best_answer: false)
+      end
+      @answer.update(best_answer: true)
+    end
   end
 
   private

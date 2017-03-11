@@ -126,4 +126,49 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'patch #mark_best' do
+    let(:user1) { create(:user) }
+    let(:question1) { create(:question_author, author: user1) }
+    sign_in_user
+    context 'authenticated user is question author' do
+      let(:answers) { create_list(:answer, 3, question: question, author: user1) }
+      it 'marks answer as the best' do
+        patch :mark_best, id: answers[0], format: 'js'
+        answers[0].reload
+        expect(answers[0].best_answer).to eq true
+      end
+
+      it 'de-marks previous best answer, when another best answer is selected' do
+        patch :mark_best, id: answers[0], format: 'js'
+        patch :mark_best, id: answers[1], format: 'js'
+        answers.each { |a| a.reload }
+        expect(answers[0].best_answer).to eq false
+        expect(answers[1].best_answer).to eq true
+      end
+
+      it 'renders mark_best template' do
+        patch :mark_best, id: answers[0], format: 'js'
+        answers[0].reload
+        expect(response).to render_template :mark_best
+      end
+    end
+
+    context 'authenticated user is not question author' do
+      let(:answer) { create(:answer, question: question1, author: user1) }
+      sign_in_user
+      it 'cannot select best answer' do
+        patch :mark_best, id: answer, format: 'js'
+        answer.reload
+        expect(answer.best_answer).to eq false
+      end
+
+      it 'renders mark_best template' do
+        patch :mark_best, id: answer, format: 'js'
+        answer.reload
+        expect(response).to render_template :mark_best
+      end
+    end
+
+  end
 end
