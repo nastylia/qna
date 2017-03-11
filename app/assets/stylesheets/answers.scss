@@ -3,3 +3,6 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .edit_answer { display: none; }
+.best-answer-text { display: none }
+.answer:first-child .best-answer-text { display: block }
+.answer:first-child .best-answer-link { display: none }
