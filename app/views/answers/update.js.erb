@@ -1,5 +1,7 @@
-<% if @answer.errors.present? %>
-  $('#answer-<%= @answer.id %>').prepend('<%= j render "common/errors", resource: @answer %>')
-<% else %>
-  $('#answer-<%= @answer.id %>').html('<%= j render @answer %>')
+<% if user_signed_in? && current_user.author_of?(@answer) %>
+  <% if @answer.errors.present? %>
+    $('#answer-<%= @answer.id %>').prepend('<%= j render "common/errors", resource: @answer %>')
+  <% else %>
+    $('#answer-<%= @answer.id %>').html('<%= j render @answer %>')
+  <% end %>
 <% end %>

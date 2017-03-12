@@ -1,5 +1,7 @@
-<% if @question.errors.present? %>
-  $('.question').prepend('<%= j render "common/errors", resource: @question %>')
-<% else %>
-  $('.question').html('<%= j render @question %>')
+<% if user_signed_in? && current_user.author_of?(@question) %>
+  <% if @question.errors.present? %>
+    $('.question').prepend('<%= j render "common/errors", resource: @question %>')
+  <% else %>
+    $('.question').html('<%= j render @question %>')
+  <% end %>
 <% end %>

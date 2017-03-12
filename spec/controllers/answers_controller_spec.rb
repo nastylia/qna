@@ -65,8 +65,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'patch #update' do
-    context 'valid attributes' do
-      context 'signed in user is an author' do
+    context 'signed in user is an author' do
+      context 'valid attributes' do
         let(:answer) { create(:answer, question: question, author: @user) }
         sign_in_user
         it 'assigns requested answer to @answer' do
@@ -91,37 +91,36 @@ RSpec.describe AnswersController, type: :controller do
         end
       end
 
-      context 'signed in user is not an author' do
-        let(:user) { create(:user) }
-        let(:answer) { create(:answer, question: question, author: user) }
+      context 'invalid attributes' do
+        let(:answer) { create(:answer, question: question, author: @user) }
         sign_in_user
-        it 'cannto edit answer' do
-          answer
-          old_body = answer.body
-          patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: 'js'
+        it 'doesn\'t change answer attributes' do
+          patch :update, id: answer, question_id: question, answer: { body: '' }, format: 'js'
           answer.reload
-          expect(answer.body).to eq old_body
+          expect(answer.body).to_not eq ''
         end
 
         it 'renders update view' do
-          patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: 'js'
+          patch :update, id: answer, question_id: question, answer: { body: '' }, format: 'js'
           expect(response).to render_template :update
         end
-
       end
     end
 
-    context 'invalid attributes' do
-      let(:answer) { create(:answer, question: question, author: @user) }
+    context 'signed in user is not an author' do
+      let(:user) { create(:user) }
+      let(:answer) { create(:answer, question: question, author: user) }
       sign_in_user
-      it 'doesn\'t change answer attributes' do
-        patch :update, id: answer, question_id: question, answer: { body: '' }, format: 'js'
+      it 'cannto edit answer' do
+        answer
+        old_body = answer.body
+        patch :update, id: answer, question_id: question, answer: { body: 'new body' }, format: 'js'
         answer.reload
-        expect(answer.body).to_not eq ''
+        expect(answer.body).to eq old_body
       end
 
       it 'renders update view' do
-        patch :update, id: answer, question_id: question, answer: { body: '' }, format: 'js'
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: 'js'
         expect(response).to render_template :update
       end
     end
