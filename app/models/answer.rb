@@ -5,4 +5,11 @@ class Answer < ApplicationRecord
   validates :body, :question, :author, presence: true
 
   scope :ordered, -> { order('answers.best_answer DESC') }
+
+  def select_new_best_answer(answers)
+    answers.each do |a|
+      a.update(best_answer: false)
+    end
+    self.update(best_answer: true)
+  end
 end

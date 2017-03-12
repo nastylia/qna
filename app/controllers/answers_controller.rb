@@ -18,12 +18,7 @@ class AnswersController < ApplicationController
   end
 
   def mark_best
-    if current_user.author_of?(@question)
-      @question.answers.each do |a|
-        a.update(best_answer: false)
-      end
-      @answer.update(best_answer: true)
-    end
+    @answer.select_new_best_answer(@question.answers) if current_user.author_of?(@question)
   end
 
   private
