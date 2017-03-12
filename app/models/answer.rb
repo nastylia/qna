@@ -7,9 +7,9 @@ class Answer < ApplicationRecord
   scope :ordered, -> { order('answers.best_answer DESC') }
 
   def select_new_best_answer(answers)
-    answers.each do |a|
-      a.update(best_answer: false)
+    Answer.transaction do
+      answers.update_all best_answer: false
+      self.update(best_answer: true)
     end
-    self.update(best_answer: true)
   end
 end
