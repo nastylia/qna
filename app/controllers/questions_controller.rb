@@ -30,7 +30,7 @@ class QuestionsController < ApplicationController
     if current_user.author_of?(@question)
       @question.update(question_params)
     else
-      render status: 403 
+      head :forbidden
     end
   end
 

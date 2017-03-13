@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
     else
-      render status: 403 
+      head :forbidden
     end
   end
 
@@ -21,7 +21,7 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.destroy
     else
-      render status: 403 
+      head :forbidden
     end
   end
 
@@ -29,7 +29,7 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@question)
       @answer.select_new_best_answer(@question.answers)
     else
-      render status: 403 
+      head :forbidden
     end
   end
 
