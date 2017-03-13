@@ -9,7 +9,7 @@ class Answer < ApplicationRecord
   def select_new_best_answer(answers)
     Answer.transaction do
       answers.update_all best_answer: false
-      self.update(best_answer: true)
+      self.update!(best_answer: true)
     end
   end
 end

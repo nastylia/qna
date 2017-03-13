@@ -10,15 +10,27 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params) if current_user.author_of?(@answer)
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+    else
+      render status: 403 
+    end
   end
 
   def destroy
-    @answer.destroy if current_user.author_of?(@answer)
+    if current_user.author_of?(@answer)
+      @answer.destroy
+    else
+      render status: 403 
+    end
   end
 
   def mark_best
-    @answer.select_new_best_answer(@question.answers) if current_user.author_of?(@question)
+    if current_user.author_of?(@question)
+      @answer.select_new_best_answer(@question.answers)
+    else
+      render status: 403 
+    end
   end
 
   private

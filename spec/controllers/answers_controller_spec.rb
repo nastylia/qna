@@ -57,9 +57,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, id: answer, format: 'js' }.to_not change(Answer, :count)
       end
 
-      it 'redirects to question show view' do
+      it 'renders 403 status' do
         delete :destroy, id: answer, format: 'js'
-        expect(response).to render_template :destroy
+        expect(response).to have_http_status(403)
       end
     end
   end
@@ -119,9 +119,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq old_body
       end
 
-      it 'renders update view' do
+      it 'renders 403 status' do
         patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: 'js'
-        expect(response).to render_template :update
+        expect(response).to have_http_status(403)
       end
     end
   end
@@ -162,10 +162,10 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.best_answer).to eq false
       end
 
-      it 'renders mark_best template' do
+      it 'renders 403 status' do
         patch :mark_best, id: answer, format: 'js'
         answer.reload
-        expect(response).to render_template :mark_best
+        expect(response).to have_http_status(403)
       end
     end
 

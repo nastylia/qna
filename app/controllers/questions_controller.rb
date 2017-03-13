@@ -27,7 +27,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params) if current_user.author_of?(@question)
+    if current_user.author_of?(@question)
+      @question.update(question_params)
+    else
+      render status: 403 
+    end
   end
 
   def destroy

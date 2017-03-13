@@ -1,3 +1,1 @@
-<% if user_signed_in? && current_user.author_of?(@question) %>
-  $('.answers').html('<%= j render @question.answers.ordered %>')
-<% end %>
+$('.answers').html('<%= j render @question.answers.ordered %>')

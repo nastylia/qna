@@ -156,9 +156,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question1.body).to eq old_body
       end
 
-      it 'renders update view' do
+      it 'renders 403 status' do
         patch :update, id: question1, question: attributes_for(:question), format: 'js'
-        expect(response).to render_template :update
+        expect(response).to have_http_status(403)
       end
     end
   end
