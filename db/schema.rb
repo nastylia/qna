@@ -17,9 +17,10 @@ ActiveRecord::Schema.define(version: 20170223220107) do
 
   create_table "answers", force: :cascade do |t|
     t.text     "body"
+    t.boolean  "best_answer", default: false
     t.integer  "question_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "author_id"
     t.index ["author_id"], name: "index_answers_on_author_id", using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
@@ -30,10 +31,8 @@ ActiveRecord::Schema.define(version: 20170223220107) do
     t.text     "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "users_id"
     t.integer  "author_id"
     t.index ["author_id"], name: "index_questions_on_author_id", using: :btree
-    t.index ["users_id"], name: "index_questions_on_users_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -56,5 +55,4 @@ ActiveRecord::Schema.define(version: 20170223220107) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users", column: "author_id"
   add_foreign_key "questions", "users", column: "author_id"
-  add_foreign_key "questions", "users", column: "users_id"
 end

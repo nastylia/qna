@@ -103,4 +103,64 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    context 'signed in user is an author' do
+      context 'valid attributes' do
+        sign_in_user
+        it 'assigns requested question to @question' do
+          patch :update, id: question, question: attributes_for(:question), format: 'js'
+          expect(assigns(:question)).to eq question
+        end
+
+        it 'changes question attributes' do
+          patch :update, id: question, question: { title: 'edited title', body: 'edited body' }, format: 'js'
+          question.reload
+          expect(question.title).to eq 'edited title'
+          expect(question.body).to eq 'edited body'
+        end
+
+        it 'renders update view' do
+          patch :update, id: question, question: attributes_for(:question), format: 'js'
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'invalid attributes' do
+        sign_in_user
+        it 'doesn\'t change question attributes' do
+          patch :update, id: question, question: { title: '', body: '' }, format: 'js'
+          question.reload
+          expect(question.body).to_not eq ''
+          expect(question.title).to_not eq ''
+        end
+
+        it 'renders update view' do
+          patch :update, id: question, question: { title: '', body: '' }, format: 'js'
+          expect(response).to render_template :update
+        end
+      end
+    end
+
+    context 'signed in user is not an author' do
+      let(:user1) { create(:user) }
+      let(:question1) { create(:question_author, author: user1) }
+      sign_in_user
+      it 'cannot edit question' do
+        question1
+        old_title = question1.title
+        old_body = question1.body
+        patch :update, id: question1, question: { title: 'edited title', body: 'edited body' }, format: 'js'
+        question.reload
+        expect(question1.title).to eq old_title
+        expect(question1.body).to eq old_body
+      end
+
+      it 'renders 403 status' do
+        patch :update, id: question1, question: attributes_for(:question), format: 'js'
+        expect(response).to have_http_status(403)
+      end
+    end
+  end
+
 end

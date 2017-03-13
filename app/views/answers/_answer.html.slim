@@ -1,5 +1,17 @@
 - if answer.persisted?
-  .answer
+  div id="answer-#{answer.id}" class=( 'best_answer' if answer.best_answer ) class='answer' data={ answer_id: answer.id }
+
+    = render "answers/best_answer_links", answer: answer
+
+    p.text
+      = answer.body
     - if user_signed_in? && current_user.author_of?(answer)
-      p= link_to 'Delete answer', answer_path(answer), :method => :delete
-    p= answer.body
+      p
+        = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+        = ', '
+        = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+      p
+        = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+          = f.label :body, 'Answer'
+          = f.text_area :body
+          = f.submit 'Save'

@@ -1,5 +1,4 @@
-require 'rails_helper'
-
+require_relative '../feature_helper'
 feature 'Create answer for a question', %q{
   In order to answer the question
   As an authenticated user
@@ -17,11 +16,10 @@ feature 'Create answer for a question', %q{
     fill_in 'Body', with: 'Awesome answer'
     click_on 'Post Your Answer'
 
-    within '.answer' do
+    within ".answers" do
       expect(page).to have_content 'Awesome answer'
     end
     expect(current_path).to eq question_path(question)
-
   end
 
   scenario 'Authenticated user creates invalid answer', js: true do
@@ -29,7 +27,6 @@ feature 'Create answer for a question', %q{
     sleep(1)
 
     visit question_path(question)
-    fill_in 'Body', with: ''
     click_on 'Post Your Answer'
 
     expect(page).to have_content 'Cannot save Answer:'
