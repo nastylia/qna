@@ -12,6 +12,6 @@
         = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
       p
         = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-          = f.label :body, 'Answer'
+          = f.label :body, 'Your answer'
           = f.text_area :body
           = f.submit 'Save'
