@@ -18,7 +18,6 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-    binding.pry
     @question.author_id = current_user.id
     if @question.save
       flash[:notice] = 'Your question was successfully created'
