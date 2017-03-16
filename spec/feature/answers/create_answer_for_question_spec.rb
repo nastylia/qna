@@ -13,7 +13,7 @@ feature 'Create answer for a question', %q{
     sleep(1)
 
     visit question_path(question)
-    fill_in 'Body', with: 'Awesome answer'
+    fill_in 'Your answer', with: 'Awesome answer'
     click_on 'Post Your Answer'
 
     within ".answers" do
@@ -35,7 +35,7 @@ feature 'Create answer for a question', %q{
 
   scenario 'Non-authenticated user answers the question' do
     visit question_path(question)
-    fill_in 'Body', with: 'Awesome answer'
+    fill_in 'Your answer', with: 'Awesome answer'
     click_on 'Post Your Answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
