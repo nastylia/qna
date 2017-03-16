@@ -5,10 +5,7 @@
 
     p.text
       = answer.body
-      p Attachments:
-      ul
-        - answer.attachments.each do |a|
-          li= link_to a.file.identifier, a.file.url
+      = render 'attachments/show_attachments', item: answer
 
     - if user_signed_in? && current_user.author_of?(answer)
       p

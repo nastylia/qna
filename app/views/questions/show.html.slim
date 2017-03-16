@@ -11,8 +11,5 @@ p Your answer:
   p
     = f.label :body, 'Your answer'
     = f.text_area :body
-  p
-    = f.fields_for :attachments do |a|
-      = a.label :file
-      = a.file_field :file
+  p= render 'attachments/add_attachment', f: f
   p= f.submit 'Post Your Answer'
