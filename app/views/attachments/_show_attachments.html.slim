@@ -1,5 +1,7 @@
 p Attachments:
 ul
   - item.attachments.each do |a|
-    li= link_to a.file.identifier, a.file.url
+    li
+      = link_to a.file.identifier, a.file.url
+      = link_to_remove_association "Delete file", a
     /li= a.file.url
