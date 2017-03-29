@@ -1,0 +1,5 @@
+  p Attachments:
+  p
+    = f.fields_for :attachments do |a|
+      = render 'attachments/add_attachment', f: a
+    = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/add_attachment'
