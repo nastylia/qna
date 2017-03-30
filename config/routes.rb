@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :questions do
+    resources :attachments
     resources :answers, shallow: true do
       patch 'mark_best', on: :member
     end
