@@ -11,7 +11,7 @@ feature 'Delete files from question', %q{
   given!(:question_author1) { create(:question_author, author: author1) }
   given!(:file) {create(:attachment, attachable: question_author1)}
 
-  scenario 'Author can delete attached file from his question' do
+  scenario 'Author can delete attached file from his question', js: true do
     sign_in(author1)
     visit question_path(question_author1)
     expect(page).to have_link 'test1', href: "/uploads/attachment/file/1/test1"
@@ -21,7 +21,16 @@ feature 'Delete files from question', %q{
 
 
   end
-  scenario 'Authenticated user, not author cannot delete attached file from a question'
-  scenario 'Not authenticated user cannot delete attached file from a question'
+
+  scenario 'Authenticated user, not author cannot delete attached file from a question' do
+    sign_in(author2)
+    visit question_path(question_author1)
+    expect(page).to_not have_link 'Delete file'
+  end
+
+  scenario 'Not authenticated user cannot delete attached file from a question' do
+    visit question_path(question_author1)
+    expect(page).to_not have_link 'Delete file'
+  end
   
 end

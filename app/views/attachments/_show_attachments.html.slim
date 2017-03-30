@@ -1,7 +1,8 @@
 p Attachments:
 ul
   - item.attachments.each do |a|
-    li
+    .attachment id="attachment-#{a.id}"
       = link_to a.file.identifier, a.file.url
-      = link_to_remove_association "Delete file", a
+      - if user_signed_in? && current_user.author_of?(item)
+        = link_to "Delete file", polymorphic_path([item, a]), method: :delete, remote: true
     /li= a.file.url
