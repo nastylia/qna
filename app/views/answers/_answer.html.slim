@@ -5,6 +5,8 @@
 
     p.text
       = answer.body
+      = render 'attachments/show_attachments', item: answer
+
     - if user_signed_in? && current_user.author_of?(answer)
       p
         = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true

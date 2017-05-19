@@ -13,3 +13,5 @@
 
 p Question name: #{@question.title}
 p Question body: #{@question.body}
+
+= render 'attachments/show_attachments', item: @question

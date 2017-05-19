@@ -8,6 +8,8 @@ p Your answer:
 #errors
 = form_for [@question, @answer], remote: true do |f|
   = render 'common/errors', resource: @answer
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Post Your Answer'
+  p
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+  p= render 'attachments/add_attachments', f: f
+  p= f.submit 'Post Your Answer'

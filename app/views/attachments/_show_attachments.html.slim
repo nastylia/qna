@@ -1,0 +1,8 @@
+p Attachments:
+ul
+  - item.attachments.each do |a|
+    .attachment id="attachment-#{a.id}"
+      = link_to a.file.identifier, a.file.url
+      - if user_signed_in? && current_user.author_of?(item)
+        = link_to "Delete file", a, method: :delete, remote: true
+    /li= a.file.url
