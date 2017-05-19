@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
   
   validates :body, :question, :author, presence: true
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank
 
   scope :ordered, -> { order('answers.best_answer DESC') }
 
