@@ -168,6 +168,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to have_http_status(403)
       end
     end
+  end
 
+  describe 'patch #vote_up' do
   end
 end

@@ -33,6 +33,10 @@ class AnswersController < ApplicationController
     end
   end
 
+  def vote_up
+
+  end
+
   private
 
   def load_answer_and_question
