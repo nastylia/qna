@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :questions do
-    resources :answers, shallow: true do
-      patch 'mark_best', on: :member
-      patch 'vote_up', on: :member
+
+  concern :votable do
+    resources :votes, only: [:up, :down, :unvote] do
+      patch :up, on: :collection
+      patch :down, on: :collection
+      patch :unvote, on: :collection
+    end
+  end
+
+  resources :questions, concerns: :votable do
+    resources :answers, shallow: true, concerns: :votable do
+      patch :mark_best, on: :member
     end
   end
 

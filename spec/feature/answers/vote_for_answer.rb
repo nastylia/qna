@@ -8,12 +8,12 @@ feature 'Vote for answer', %q{
 
   given!(:author) { create(:user) }
   given!(:question) { create(:question_author, author: author) }
-  given!(:answer) { create(:answer, question: question, author: author) }  
+  given!(:answer) { create(:answer, question: question, author: author) }
 
   scenario 'Authenticated user can vote for the answer he likes', js: true do
     sign_in(author)
     visit question_path(question)
-
+save_and_open_page
     within "#answer-#{answer.id}" do
       click_on "Vote"
 
