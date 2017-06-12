@@ -12,8 +12,8 @@
         = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
         = ', '
         = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-        = ','
-        = link_to 'Vote', vote_up_answer_path(answer), method: :patch, remote: true, data { type: json }
+        = ', '
+        = link_to 'Vote', up_answer_votes_path(answer), method: :patch, remote: true, data: { type: :json }
       p
         = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
           = f.label :body, 'Answer'
