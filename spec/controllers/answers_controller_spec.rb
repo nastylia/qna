@@ -169,7 +169,4 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
-  describe 'patch #vote_up' do
-  end
 end

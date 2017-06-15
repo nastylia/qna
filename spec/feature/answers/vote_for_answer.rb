@@ -13,7 +13,6 @@ feature 'Vote for answer', %q{
   scenario 'Authenticated user can vote for the answer he likes', js: true do
     sign_in(author)
     visit question_path(question)
-save_and_open_page
     within "#answer-#{answer.id}" do
       click_on "Vote"
 

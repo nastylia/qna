@@ -2,11 +2,16 @@ Rails.application.routes.draw do
   devise_for :users
 
   concern :votable do
-    resources :votes, only: [:up, :down, :unvote] do
-      patch :up, on: :collection
-      patch :down, on: :collection
-      patch :unvote, on: :collection
+    member do
+      patch :up
+      patch :down
+      patch :unvote
     end
+    # resources :votes, only: [:up, :down, :unvote] do
+    #   patch :up, on: :collection
+    #   patch :down, on: :collection
+    #   patch :unvote, on: :collection
+    # end
   end
 
   resources :questions, concerns: :votable do
