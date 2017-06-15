@@ -3,12 +3,23 @@ module Voted
 
   included do
     before_action :set_votable, only: [:up]
-    before_action :set_vote, only: [:up]
   end
 
   def up
-    @vote.update(value: 1)
-    
+
+    # instance_variable_set("@#{controller_name.singularize}", @votable)
+
+    respond_to do |format|
+      if user_signed_in?
+        set_vote
+        @vote.update(value: 1)
+        format.json { render json: @vote }
+      else
+        format.json { render json: {}, status: :unauthorized }
+      # format.json { render .., status: :unprocessable_entity }
+      end
+    end
+
   end
 
   private

@@ -15,13 +15,16 @@ feature 'Vote for answer', %q{
     visit question_path(question)
     within "#answer-#{answer.id}" do
       click_on "Vote"
-
       expect(page).to have_content 'Votes: 1'
     end
   end
 
   scenario 'Non-uthenticated user cannot vote for the answer he likes' do
-
+    visit question_path(question)
+    within "#answer-#{answer.id}" do
+      click_on "Vote"
+    end
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 
 end
