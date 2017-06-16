@@ -2,7 +2,6 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!, except: [:up]
     before_action :set_votable, only: [:up]
   end
 
@@ -11,6 +10,18 @@ module Voted
       if user_signed_in?
         set_vote
         @vote.update(value: 1)
+        format.json { render json: @vote }
+      else
+        format.json { render json: {}, status: :unauthorized }
+      end
+    end
+  end
+
+  def down
+    respond_to do |format|
+      if user_signed_in?
+        set_vote
+        @vote.update(value: -1)
         format.json { render json: @vote }
       else
         format.json { render json: {}, status: :unauthorized }

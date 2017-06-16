@@ -9,7 +9,16 @@ ready = ->
     answer_id = $(@).data('answerId')
     $('form#edit-answer-' + answer_id).show()
 
-  $(document).on 'ajax:success', 'a.vote', (e, data, status, xhr) ->
+  $(document).on 'ajax:success', 'a.up-vote', (e, data, status, xhr) ->
+    vote_info = $.parseJSON(xhr.responseText)
+    vote_id = '#vote-' + vote_info[0].votable_type.toLowerCase() + '-' + vote_info[0].votable_id
+    $('#error').html('')
+    $(vote_id).html(vote_info[0].value)
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    error_info =  $.parseJSON(xhr.responseText)
+    $('#error').html(error_info.error)
+
+  $(document).on 'ajax:success', 'a.down-vote', (e, data, status, xhr) ->
     vote_info = $.parseJSON(xhr.responseText)
     vote_id = '#vote-' + vote_info[0].votable_type.toLowerCase() + '-' + vote_info[0].votable_id
     $('#error').html('')
