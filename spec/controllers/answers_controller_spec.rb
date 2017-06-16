@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
+
+  it_behaves_like 'voted'
+
   let(:question) { create(:question_author, author: @user) }
 
   describe 'POST #create' do

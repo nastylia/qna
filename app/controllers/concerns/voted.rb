@@ -2,13 +2,11 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
+    before_action :authenticate_user!, except: [:up]
     before_action :set_votable, only: [:up]
   end
 
   def up
-
-    # instance_variable_set("@#{controller_name.singularize}", @votable)
-
     respond_to do |format|
       if user_signed_in?
         set_vote
@@ -16,10 +14,8 @@ module Voted
         format.json { render json: @vote }
       else
         format.json { render json: {}, status: :unauthorized }
-      # format.json { render .., status: :unprocessable_entity }
       end
     end
-
   end
 
   private
@@ -29,6 +25,7 @@ module Voted
   end
 
   def set_votable
+    # binding.pry
     @votable = model_klass.find(params[:id])
   end
 
