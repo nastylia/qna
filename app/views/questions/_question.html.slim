@@ -15,3 +15,13 @@ p Question name: #{@question.title}
 p Question body: #{@question.body}
 
 = render 'attachments/show_attachments', item: @question
+
+p.votes
+  table
+    tr
+      td = 'Votes:'
+      td id="vote-question-#{question.id}" 0
+      td
+        = link_to 'Up', up_question_path(question), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
+      td
+        = link_to 'Down', down_question_path(question), method: :patch, remote: true, data: { type: :json}, class: 'down-vote'
