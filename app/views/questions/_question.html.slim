@@ -24,4 +24,6 @@ p.votes
       td
         = link_to 'Up', up_question_path(question), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
       td
+        = link_to 'Unvote', unvote_question_path(question), method: :patch, remote: true, data: { type: :json}, class: 'un-vote'
+      td
         = link_to 'Down', down_question_path(question), method: :patch, remote: true, data: { type: :json}, class: 'down-vote'

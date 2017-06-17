@@ -27,5 +27,7 @@
           td
             = link_to 'Up', up_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
           td
+            = link_to 'Unvote', unvote_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'un-vote'
+          td
             = link_to 'Down', down_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'down-vote'
     p -------------------------------------------------------------------

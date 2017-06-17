@@ -2,7 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_votable, only: [:up, :down]
+    before_action :set_votable, only: [:up, :down, :unvote]
   end
 
   def up
@@ -11,6 +11,18 @@ module Voted
 
   def down
     vote(-1)
+  end
+
+  def unvote
+    set_vote
+    if @vote
+      @vote.delete if @vote
+      respond_to do |format|
+        format.json { render json: { votable_type: @vote.votable_type,
+                                     votable_id: @vote.votable_id,
+                                     result_votes: Vote.vote_result(@vote.votable_type, @vote.votable_id) } }
+      end
+    end
   end
 
   private
@@ -25,7 +37,6 @@ module Voted
 
   def set_vote
     @vote = Vote.where(user: current_user, votable_type: controller_name.classify, votable_id: params[:id]).first
-    @vote = Vote.create(value: 0, user: current_user, votable_type: controller_name.classify, votable_id: params[:id]) if @vote.nil?
   end
 
   def vote(value)
@@ -35,8 +46,14 @@ module Voted
           format.json { render json: { error: "You are the author of the #{model_klass}. You cannot vote." }, status: :unauthorized }
         else
           set_vote
-          @vote.update(value: value)
-          format.json { render json: { votable_type: @vote.votable_type, votable_id: @vote.votable_id, result_votes: Vote.vote_result(@vote.votable_type, @vote.votable_id) } }
+          if @vote.nil?
+            @vote = Vote.create(value: value, user: current_user, votable_type: controller_name.classify, votable_id: params[:id])
+            format.json { render json: { votable_type: @vote.votable_type,
+                                         votable_id: @vote.votable_id,
+                                         result_votes: Vote.vote_result(@vote.votable_type, @vote.votable_id) } }
+          else
+            format.json { render json: { error: "Unvote first"}, status: :unauthorized }
+          end
         end
       else
         format.json { render json: {}, status: :unauthorized }

@@ -18,25 +18,66 @@ feature 'Vote for answer', %q{
 
   context 'Authenticated user' do
 
-    before do
-      sign_in(user)
-      visit question_path(question)
+    context 'Sign_in user' do
+      before do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      scenario 'User can vote for the answer he likes', js: true do
+        within "#answer-#{answer.id}" do
+          click_on "Up"
+          expect(page).to have_content 'Votes: 3'
+        end
+      end
+
+      scenario 'User can down vote the answer he dislikes', js: true do
+        within "#answer-#{answer.id}" do
+          click_on "Down"
+          expect(page).to have_content 'Votes: 1'
+        end
+      end
+
+      scenario 'User cannot vote 2 times at a time', js: true  do
+        within "#answer-#{answer.id}" do
+          click_on "Up"
+          sleep 1
+          click_on "Up"
+          expect(page).to have_content 'Votes: 3'
+        end
+        expect(page).to have_content 'Unvote first'
+      end
+
+      scenario 'User cannot down vote 2 times at a time', js: true  do
+        within "#answer-#{answer.id}" do
+          click_on "Down"
+          sleep 1
+          click_on "Down"
+          expect(page).to have_content 'Votes: 1'
+        end
+        expect(page).to have_content 'Unvote first'
+      end
+
+      scenario 'User can vote then unvote then downvote', js: true  do
+        within "#answer-#{answer.id}" do
+          click_on "Up"
+          sleep 1
+          click_on "Unvote"
+          sleep 1
+          click_on "Down"
+          expect(page).to have_content 'Votes: 2'
+        end
+      end
     end
 
-    scenario 'User can vote for the answer he likes', js: true do
+    scenario 'User can unvote', js: true  do
+      sign_in(users[0])
+      visit question_path(question)
       within "#answer-#{answer.id}" do
-        click_on "Up"
+        click_on "Unvote"
         expect(page).to have_content 'Votes: 1'
       end
     end
-
-    scenario 'User can down vote the answer he dislikes', js: true do
-      within "#answer-#{answer.id}" do
-        click_on "Down"
-        expect(page).to have_content 'Votes: -1'
-      end
-    end
-
   end
 
   context 'Authenticated user is answer\'s author' do
@@ -44,6 +85,13 @@ feature 'Vote for answer', %q{
     before do
       sign_in(author)
       visit question_path(question)
+    end
+
+    scenario 'Author cannot unvote', js: true do
+      within "#answer-#{answer.id}" do
+        click_on "Unvote"
+        expect(page).to have_content 'Votes: 2'
+      end
     end
 
     scenario 'Author cannot vote for his answer', js: true do
@@ -65,16 +113,17 @@ feature 'Vote for answer', %q{
   end
 
   context 'Non-authenticated user' do
+    before do
+      visit question_path(question)
+    end
 
     scenario 'Votes are correctly displayed when the page is loaded' do
-      visit question_path(question)
       within "#answer-#{answer.id}" do
         expect(page).to have_content 'Votes: 2'
       end
     end
 
     scenario 'User cannot vote for the answer he likes' do
-      visit question_path(question)
       within "#answer-#{answer.id}" do
         click_on "Up"
       end
@@ -82,9 +131,15 @@ feature 'Vote for answer', %q{
     end
 
     scenario 'User cannot down vote the answer he dislikes' do
-      visit question_path(question)
       within "#answer-#{answer.id}" do
         click_on "Down"
+      end
+      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    end
+
+    scenario 'User cannot unvote', js: true do
+      within "#answer-#{answer.id}" do
+        click_on "Unvote"
       end
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end

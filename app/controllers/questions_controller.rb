@@ -52,9 +52,7 @@ class QuestionsController < ApplicationController
   private
 
   def set_votes
-    # binding.pry
     @question.result_votes = Vote.vote_result('Question', @question.id)
-    # return if @question.answers.nil?
     @question.answers.each do |answer|
       answer.result_votes = Vote.vote_result('Answer', answer.id)
       answer.save!
