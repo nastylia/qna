@@ -11,18 +11,18 @@ ready = ->
 
   $(document).on 'ajax:success', 'a.up-vote', (e, data, status, xhr) ->
     vote_info = $.parseJSON(xhr.responseText)
-    vote_id = '#vote-' + vote_info[0].votable_type.toLowerCase() + '-' + vote_info[0].votable_id
+    vote_id = '#vote-' + vote_info.votable_type.toLowerCase() + '-' + vote_info.votable_id
     $('#error').html('')
-    $(vote_id).html(vote_info[0].value)
+    $(vote_id).html(vote_info.value)
   .bind 'ajax:error', (e, xhr, status, error) ->
     error_info =  $.parseJSON(xhr.responseText)
     $('#error').html(error_info.error)
 
   $(document).on 'ajax:success', 'a.down-vote', (e, data, status, xhr) ->
     vote_info = $.parseJSON(xhr.responseText)
-    vote_id = '#vote-' + vote_info[0].votable_type.toLowerCase() + '-' + vote_info[0].votable_id
+    vote_id = '#vote-' + vote_info.votable_type.toLowerCase() + '-' + vote_info.votable_id
     $('#error').html('')
-    $(vote_id).html(vote_info[0].value)
+    $(vote_id).html(vote_info.value)
   .bind 'ajax:error', (e, xhr, status, error) ->
     error_info =  $.parseJSON(xhr.responseText)
     $('#error').html(error_info.error)

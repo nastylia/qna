@@ -49,8 +49,8 @@ module Voted
   end
 
   def set_vote
-    @vote = Vote.where(user: current_user, votable_type: controller_name.classify, votable_id: params[:id])
-    @vote = Vote.create(value: 0, user: current_user, votable_type: controller_name.classify, votable_id: params[:id]) if @vote.empty?
+    @vote = Vote.where(user: current_user, votable_type: controller_name.classify, votable_id: params[:id]).first
+    @vote = Vote.create(value: 0, user: current_user, votable_type: controller_name.classify, votable_id: params[:id]) if @vote.nil?
   end
 
 end

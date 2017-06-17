@@ -7,11 +7,12 @@ feature 'Vote for question', %q{
 } do
 
   given!(:author) { create(:user) }
+  given!(:user) { create(:user) }
   given!(:question) { create(:question_author, author: author) }
 
   context 'Authenticated user' do
     before do
-      sign_in(author)
+      sign_in(user)
       visit question_path(question)
     end
 
@@ -35,7 +36,7 @@ feature 'Vote for question', %q{
     context 'Authenticated user is question\'s author' do
 
       before do
-        sign_in(user)
+        sign_in(author)
         visit question_path(question)
       end
 

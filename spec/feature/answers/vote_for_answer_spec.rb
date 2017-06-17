@@ -37,7 +37,7 @@ feature 'Vote for answer', %q{
   context 'Authenticated user is answer\'s author' do
 
     before do
-      sign_in(user)
+      sign_in(author)
       visit question_path(question)
     end
 
@@ -54,7 +54,7 @@ feature 'Vote for answer', %q{
         click_on "Down"
         expect(page).to have_content 'Votes: 0'
       end
-      expect(page).to have_content 'You are the author of the answer. You cannot vote.'
+      expect(page).to have_content 'You are the author of the Answer. You cannot vote.'
     end
 
   end
