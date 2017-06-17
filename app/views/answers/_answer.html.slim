@@ -22,8 +22,8 @@
     p.votes
       table
         tr
-          td = 'Votes:'
-          td id="vote-answer-#{answer.id}" 0
+          td = 'Votes: '
+          td id="vote-answer-#{answer.id}" #{answer.result_votes}
           td
             = link_to 'Up', up_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
           td

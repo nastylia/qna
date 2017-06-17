@@ -1,8 +1,9 @@
 class QuestionsController < ApplicationController
   include Voted
-  
+
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :destroy, :update]
+  before_action :set_votes, only: [:show]
 
   def index
     @questions = Question.all
@@ -49,6 +50,17 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def set_votes
+    # binding.pry
+    @question.result_votes = Vote.vote_result('Question', @question.id)
+    # return if @question.answers.nil?
+    @question.answers.each do |answer|
+      answer.result_votes = Vote.vote_result('Answer', answer.id)
+      answer.save!
+    end
+    @question.save!
+  end
 
   def load_question
     @question = Question.find(params[:id])

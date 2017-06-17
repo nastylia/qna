@@ -11,6 +11,7 @@ RSpec.describe Vote do
     let!(:vote2) { create(:vote, user: user[2], value: 1, votable: question) }
     let!(:vote3) { create(:vote, user: user[3], value: -1, votable: question) }
     let!(:vote4) { create(:vote, user: user[4], value: 1, votable: question) }
+
     it 'should sum up all votes and return result' do
       expect(Vote.vote_result('Question', question.id)).to eq 2
     end
