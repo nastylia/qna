@@ -7,12 +7,14 @@ feature 'Vote for answer', %q{
 } do
 
   given!(:author) { create(:user) }
+  given!(:user) {create(:user)}
   given!(:question) { create(:question_author, author: author) }
   given!(:answer) { create(:answer, question: question, author: author) }
 
   context 'Authenticated user' do
+
     before do
-      sign_in(author)
+      sign_in(user)
       visit question_path(question)
     end
 
@@ -28,6 +30,31 @@ feature 'Vote for answer', %q{
         click_on "Down"
         expect(page).to have_content 'Votes: -1'
       end
+    end
+
+  end
+
+  context 'Authenticated user is answer\'s author' do
+
+    before do
+      sign_in(user)
+      visit question_path(question)
+    end
+
+    scenario 'Author cannot vote for his answer', js: true do
+      within "#answer-#{answer.id}" do
+        click_on "Up"
+        expect(page).to have_content 'Votes: 0'
+      end
+      expect(page).to have_content 'You are the author of the Answer. You cannot vote.'
+    end
+
+    scenario 'Author cannot down vote his answer', js: true do
+      within "#answer-#{answer.id}" do
+        click_on "Down"
+        expect(page).to have_content 'Votes: 0'
+      end
+      expect(page).to have_content 'You are the author of the answer. You cannot vote.'
     end
 
   end

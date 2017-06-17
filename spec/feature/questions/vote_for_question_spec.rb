@@ -31,6 +31,32 @@ feature 'Vote for question', %q{
 
   end
 
+
+    context 'Authenticated user is question\'s author' do
+
+      before do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      scenario 'Author cannot vote for his question', js: true do
+        within ".question" do
+          click_on "Up"
+          expect(page).to have_content 'Votes: 0'
+        end
+        expect(page).to have_content 'You are the author of the Question. You cannot vote.'
+      end
+
+      scenario 'Author cannot down vote his question', js: true do
+        within ".question" do
+          click_on "Down"
+          expect(page).to have_content 'Votes: 0'
+        end
+        expect(page).to have_content 'You are the author of the Question. You cannot vote.'
+      end
+
+    end
+
   context 'Non-authenticated user' do
 
     scenario 'User cannot vote for the question he likes' do

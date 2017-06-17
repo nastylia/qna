@@ -2,15 +2,19 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_votable, only: [:up]
+    before_action :set_votable, only: [:up, :down]
   end
 
   def up
     respond_to do |format|
       if user_signed_in?
-        set_vote
-        @vote.update(value: 1)
-        format.json { render json: @vote }
+        if current_user.author_of?(@votable)
+          format.json { render json: { error: "You are the author of the #{model_klass}. You cannot vote." }, status: :unauthorized }
+        else
+          set_vote
+          @vote.update(value: 1)
+          format.json { render json: @vote }
+        end
       else
         format.json { render json: {}, status: :unauthorized }
       end
@@ -20,9 +24,13 @@ module Voted
   def down
     respond_to do |format|
       if user_signed_in?
-        set_vote
-        @vote.update(value: -1)
-        format.json { render json: @vote }
+        if current_user.author_of?(@votable)
+          format.json { render json: { error: "You are the author of the #{model_klass}. You cannot vote." }, status: :unauthorized }
+        else
+          set_vote
+          @vote.update(value: -1)
+          format.json { render json: @vote }
+        end
       else
         format.json { render json: {}, status: :unauthorized }
       end

@@ -7,13 +7,13 @@ shared_examples 'voted' do
   describe 'patch#up' do
     context 'user is signed in' do
 
-      let(:question) { create(:question, author: @user) }
-      let(:answer) { create(:answer, question: question, author: @user) }
+      let(:user) {create(:user)}
+      let(:question) { create(:question, author: user) }
+      let(:answer) { create(:answer, question: question, author: user) }
       let(:votable) { votable_type == 'Answer' ? answer : question}
       sign_in_user
 
       it 'responds with success' do
-        # binding.pry
         patch :up, id: votable, format: 'json'
         expect(response).to have_http_status(:success)
       end
@@ -25,13 +25,30 @@ shared_examples 'voted' do
       end
     end
 
+    context 'user is an author' do
+      let(:question) { create(:question, author: @user) }
+      let(:answer) { create(:answer, question: question, author: @user) }
+      let(:votable) { votable_type == 'Answer' ? answer : question}
+      sign_in_user
+
+      it 'responds with unauthorized' do
+        patch :up, id: votable, format: 'json'
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'doesn\'t save new vote' do
+        expect { patch :up, id: votable, format: 'json'}.to_not change(Vote, :count)
+      end
+
+    end
+
     context 'user is not signed in' do
       let(:user) {create(:user)}
       let(:question) { create(:question, author: user) }
       let(:answer) { create(:answer, question: question, author: user) }
       let(:votable) { votable_type == 'Answer' ? answer : question}
 
-      it 'respondss with unauthorized' do
+      it 'responds with unauthorized' do
         patch :up, id: votable, format: 'json'
         expect(response).to have_http_status(:unauthorized)
       end
@@ -44,8 +61,9 @@ shared_examples 'voted' do
 
   describe 'patch#down' do
     context 'user is signed in' do
-      let(:question) { create(:question, author: @user) }
-      let(:answer) { create(:answer, question: question, author: @user) }
+      let (:user) { create(:user) }
+      let(:question) { create(:question, author: user) }
+      let(:answer) { create(:answer, question: question, author: user) }
       let(:votable) { votable_type == 'Answer' ? answer : question}
       sign_in_user
 
@@ -59,6 +77,23 @@ shared_examples 'voted' do
         vote = Vote.where(user_id: @user, votable_type: votable_type, votable_id: votable).first
         expect(vote.value).to eq -1
       end
+    end
+
+    context 'user is an author' do
+      let(:question) { create(:question, author: @user) }
+      let(:answer) { create(:answer, question: question, author: @user) }
+      let(:votable) { votable_type == 'Answer' ? answer : question}
+      sign_in_user
+
+      it 'responds with unauthorized' do
+        patch :down, id: votable, format: 'json'
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'doesn\'t save new vote' do
+        expect { patch :down, id: votable, format: 'json'}.to_not change(Vote, :count)
+      end
+
     end
 
     context 'user is not signed in' do
