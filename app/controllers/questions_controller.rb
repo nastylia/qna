@@ -52,9 +52,9 @@ class QuestionsController < ApplicationController
   private
 
   def set_votes
-    @question.result_votes = Vote.vote_result('Question', @question.id)
+    @question.result_votes = @question.votes.sum(:value)
     @question.answers.each do |answer|
-      answer.result_votes = Vote.vote_result('Answer', answer.id)
+      answer.result_votes = answer.votes.sum(:value)
       answer.save!
     end
     @question.save!

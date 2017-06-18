@@ -19,15 +19,5 @@
                 = f.label :body, 'Answer'
                 = f.text_area :body
                 = f.submit 'Save'
-    p.votes
-      table
-        tr
-          td = 'Votes: '
-          td id="vote-answer-#{answer.id}" #{answer.result_votes}
-          td
-            = link_to 'Up', up_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
-          td
-            = link_to 'Unvote', unvote_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'un-vote'
-          td
-            = link_to 'Down', down_answer_path(answer), method: :patch, remote: true, data: { type: :json}, class: 'down-vote'
+    = render 'common/votes_links', item_type: 'answer', item: answer
     p -------------------------------------------------------------------

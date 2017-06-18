@@ -1,0 +1,11 @@
+p.votes
+  table
+    tr
+      td = 'Votes: '
+      td id="vote-#{item_type}-#{item.id}" #{item.result_votes}
+      td
+        = link_to 'Up', polymorphic_url([:up, item]), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
+      td
+        = link_to 'Unvote', polymorphic_url([:unvote, item]), method: :patch, remote: true, data: { type: :json}, class: 'un-vote'
+      td
+        = link_to 'Down', polymorphic_url([:down, item]), method: :patch, remote: true, data: { type: :json}, class: 'down-vote'

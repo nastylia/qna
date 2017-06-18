@@ -24,10 +24,10 @@ shared_examples 'voted' do
         expect(vote.value).to eq 1
       end
 
-      it 'responds with unauthorized if vote twice' do
+      it 'responds with forbidden if vote twice' do
         patch :up, id: votable, format: 'json'
         expect { patch :up, id: votable, format: 'json'}.to_not change(Vote, :count)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -37,9 +37,9 @@ shared_examples 'voted' do
       let(:votable) { votable_type == 'Answer' ? answer : question}
       sign_in_user
 
-      it 'responds with unauthorized' do
+      it 'responds with forbidden' do
         patch :up, id: votable, format: 'json'
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'doesn\'t save new vote' do
@@ -133,9 +133,9 @@ shared_examples 'voted' do
       let(:votable) { votable_type == 'Answer' ? answer : question}
       sign_in_user
 
-      it 'responds with unauthorized' do
+      it 'responds with forbidden' do
         patch :down, id: votable, format: 'json'
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'doesn\'t save new vote' do
@@ -150,7 +150,7 @@ shared_examples 'voted' do
       let(:answer) { create(:answer, question: question, author: user) }
       let(:votable) { votable_type == 'Answer' ? answer : question}
 
-      it 'respondss with unauthorized' do
+      it 'responds with unauthorized' do
         patch :down, id: votable, format: 'json'
         expect(response).to have_http_status(:unauthorized)
       end

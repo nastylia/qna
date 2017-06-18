@@ -9,29 +9,10 @@ ready = ->
     answer_id = $(@).data('answerId')
     $('form#edit-answer-' + answer_id).show()
 
-  $(document).on 'ajax:success', 'a.up-vote', (e, data, status, xhr) ->
-    vote_info = $.parseJSON(xhr.responseText)
-    vote_id = '#vote-' + vote_info.votable_type.toLowerCase() + '-' + vote_info.votable_id
+  $(document).on 'ajax:success', 'a.up-vote, a.down-vote, a.un-vote', (e, data, status, xhr) ->
+    vote_id = '#vote-' + data.votable_type.toLowerCase() + '-' + data.votable_id
     $('#error').html('')
-    $(vote_id).html(vote_info.result_votes)
-  .bind 'ajax:error', (e, xhr, status, error) ->
-    error_info =  $.parseJSON(xhr.responseText)
-    $('#error').html(error_info.error)
-
-  $(document).on 'ajax:success', 'a.down-vote', (e, data, status, xhr) ->
-    vote_info = $.parseJSON(xhr.responseText)
-    vote_id = '#vote-' + vote_info.votable_type.toLowerCase() + '-' + vote_info.votable_id
-    $('#error').html('')
-    $(vote_id).html(vote_info.result_votes)
-  .bind 'ajax:error', (e, xhr, status, error) ->
-    error_info =  $.parseJSON(xhr.responseText)
-    $('#error').html(error_info.error)
-
-  $(document).on 'ajax:success', 'a.un-vote', (e, data, status, xhr) ->
-    vote_info = $.parseJSON(xhr.responseText)
-    vote_id = '#vote-' + vote_info.votable_type.toLowerCase() + '-' + vote_info.votable_id
-    $('#error').html('')
-    $(vote_id).html(vote_info.result_votes)
+    $(vote_id).html(data.result_votes)
   .bind 'ajax:error', (e, xhr, status, error) ->
     error_info =  $.parseJSON(xhr.responseText)
     $('#error').html(error_info.error)
