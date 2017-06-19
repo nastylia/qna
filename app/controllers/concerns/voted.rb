@@ -2,24 +2,27 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!, only: [:up, :down]
+    before_action :authenticate_user!, only: [:up, :down, :unvote]
     before_action :set_votable, only: [:up, :down, :unvote]
-    # after_action :respond_json, only: [:up, :down, :unvote]
   end
 
   def up
-    @result = Vote.vote(votable: @votable, value: 1, current_user: current_user)
-    respond_json
+    vote(1)
   end
 
   def down
-    @result = Vote.vote(votable: @votable, value: -1, current_user: current_user)
-    respond_json
+    vote(-1)
   end
 
   def unvote
-    @result = Vote.unvote(votable: @votable, current_user: current_user)
-    respond_json
+    vote = @votable.unvote(current_user: current_user)
+    respond_to do |format|
+      format.json { render json: { votable_type: vote.votable_type,
+                                       votable_id: vote.votable_id,
+                                       result_votes: @votable.votes.sum(:value) } } if vote
+      format.json { render json: { error: "You are the author of the #{@votable.class.name}. You cannot unvote." },
+                           status: :forbidden } unless vote
+    end
   end
 
   private
@@ -32,11 +35,21 @@ module Voted
     @votable = model_klass.find(params[:id])
   end
 
-  def respond_json
-    if @result
-      respond_to do |format|
-        format.json { render json: @result[:result], status: @result[:status] } if @result[:status]
-        format.json { render json: @result[:result] } unless @result[:status]
+  def vote(value)
+    respond_to do |format|
+      if current_user.author_of?(@votable)
+        format.json { render json: { error: "You are the author of the #{@votable.class.name}. You cannot vote." },
+                               status: :forbidden }
+      else
+        vote = @votable.vote(value: value, current_user: current_user)
+        if vote
+          format.json { render json: { votable_type: vote.votable_type,
+                                         votable_id: vote.votable_id,
+                                         result_votes: @votable.votes.sum(:value) } }
+        else
+          format.json { render json: { error: "Unvote first" },
+                                 status: :forbidden }
+        end
       end
     end
   end

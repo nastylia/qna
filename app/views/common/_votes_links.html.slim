@@ -2,7 +2,7 @@ p.votes
   table
     tr
       td = 'Votes: '
-      td id="vote-#{item_type}-#{item.id}" #{item.result_votes}
+      td id="vote-#{item_type}-#{item.id}" #{item.sum_votes}
       td
         = link_to 'Up', polymorphic_url([:up, item]), method: :patch, remote: true, data: { type: :json}, class: 'up-vote'
       td

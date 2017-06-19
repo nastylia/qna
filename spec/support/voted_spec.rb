@@ -102,7 +102,24 @@ shared_examples 'voted' do
       it 'doesn\'t change Vote number' do
         expect { patch :unvote, id: votable, format: 'json'}.to_not change(Vote, :count)
       end
+    end
 
+    context 'user is an author' do
+      let(:question) { create(:question, author: @user) }
+      let(:answer) { create(:answer, question: question, author: @user) }
+      let(:votable) { votable_type == 'Answer' ? answer : question}
+      let(:vote) { create(:vote, user: user, value: 1, votable: votable) }
+
+      sign_in_user
+
+      it 'responds with forbidden' do
+        patch :unvote, id: votable, format: 'json'
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'doesn\'t change Vote number' do
+        expect { patch :unvote, id: votable, format: 'json'}.to_not change(Vote, :count)
+      end
     end
 
   end
