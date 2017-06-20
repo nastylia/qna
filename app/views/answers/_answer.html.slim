@@ -8,12 +8,16 @@
       = render 'attachments/show_attachments', item: answer
 
     - if user_signed_in? && current_user.author_of?(answer)
-      p
-        = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
-        = ', '
-        = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-      p
-        = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-          = f.label :body, 'Answer'
-          = f.text_area :body
-          = f.submit 'Save'
+      p.links
+        table
+          tr
+            td
+              = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+            td
+              = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+              = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+                = f.label :body, 'Answer'
+                = f.text_area :body
+                = f.submit 'Save'
+    = render 'common/votes_links', item_type: 'answer', item: answer
+    p -------------------------------------------------------------------

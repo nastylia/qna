@@ -31,6 +31,7 @@ feature 'Author can select best answer', %q{
     end
 
     scenario 'Question can have only one best answer', js: true do
+      sleep 2
       within "#answer-#{answers.last.id}" do
         click_on 'Select as the best answer'
       end
@@ -39,13 +40,14 @@ feature 'Author can select best answer', %q{
     end
 
     scenario 'can select another best answer', js: true do
+      sleep 2
       within "#answer-#{answers.last.id}" do
         click_on 'Select as the best answer'
 
         expect(page).to_not have_content 'Select as the best answer'
         expect(page).to have_content 'Best answer'
       end
-
+      sleep 1
       within "#answer-#{answers.second.id}" do
         click_on 'Select as the best answer'
 
@@ -57,6 +59,7 @@ feature 'Author can select best answer', %q{
     end
 
     scenario 'best question is the first in list', js: true do
+      sleep 1
       within "#answer-#{answers.last.id}" do
         click_on 'Select as the best answer'
       end
@@ -84,7 +87,7 @@ feature 'Author can select best answer', %q{
       visit question_path(question)
     end
 
-    scenario 'cannot select best answer' do      
+    scenario 'cannot select best answer' do
       expect(page).to_not have_content 'Select as the best answer'
     end
 

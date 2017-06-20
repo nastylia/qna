@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+
+  it_behaves_like 'voted'
+
   let(:user) { create(:user) }
   let(:question) { create(:question_author, author: @user) }
   describe 'GET #index' do
@@ -21,7 +24,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #show' do
     let(:question) { create(:question_author, author: user) }
-    
+
     before { get :show, id: question }
 
     it 'assigns the requested question to @question' do

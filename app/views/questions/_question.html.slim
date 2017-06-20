@@ -15,3 +15,5 @@ p Question name: #{@question.title}
 p Question body: #{@question.body}
 
 = render 'attachments/show_attachments', item: @question
+
+= render 'common/votes_links', item_type: 'question', item: @question
