@@ -17,11 +17,14 @@ module Voted
   def unvote
     vote = @votable.unvote(current_user: current_user)
     respond_to do |format|
-      format.json { render json: { votable_type: vote.votable_type,
-                                       votable_id: vote.votable_id,
-                                       result_votes: @votable.votes.sum(:value) } } if vote
-      format.json { render json: { error: "You are the author of the #{@votable.class.name}. You cannot unvote." },
-                           status: :forbidden } unless vote
+      if vote
+        format.json { render json: { votable_type: vote.votable_type,
+                                         votable_id: vote.votable_id,
+                                         result_votes: @votable.votes.sum(:value) } }
+      else
+        format.json { render json: { error: "You are the author of the #{@votable.class.name}. You cannot unvote." },
+                             status: :forbidden }
+      end
     end
   end
 
