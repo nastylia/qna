@@ -7,11 +7,6 @@ Rails.application.routes.draw do
       patch :down
       patch :unvote
     end
-    # resources :votes, only: [:up, :down, :unvote] do
-    #   patch :up, on: :collection
-    #   patch :down, on: :collection
-    #   patch :unvote, on: :collection
-    # end
   end
 
   resources :questions, concerns: :votable do
@@ -23,5 +18,7 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
 
   root to: "questions#index"
+
+  mount ActionCable.server => '/cable'
 
 end
