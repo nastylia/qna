@@ -58,12 +58,17 @@ class QuestionsController < ApplicationController
 
   def publish_action
     return if @question.errors.any?
-    binding.pry
+    renderer = ApplicationController.renderer.new
+    renderer.instance_variable_set(:@env, {"HTTP_HOST"=>"localhost:3000",
+      "HTTPS"=>"off",
+      "REQUEST_METHOD"=>"GET",
+      "SCRIPT_NAME"=>"",
+      "warden" => request.env["warden"]})
     ActionCable.server.broadcast(
       'questions',
-      ApplicationController.render(
-        locals: {question: @question},
-        partial: 'questions/question'
+      renderer.render(
+        locals: { question: @question },
+        partial: 'questions/question_info'
       )
     )
   end

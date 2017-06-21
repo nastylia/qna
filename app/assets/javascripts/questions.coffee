@@ -9,14 +9,13 @@ ready = ->
     $(@).hide()
     $('form#edit-question').show()
 
-App.cable.subscriptions.create('QuestionsChannel', {
-  connected: ->
-    console.log 'Connected'
-    @perform 'follow'
-  ,
+  App.cable.subscriptions.create('QuestionsChannel', {
+    connected: ->
+      @perform 'follow'
+    ,
 
-  received: (data) ->
-    questionsList.append data
-})
+    received: (data) ->
+      questionsList.append data
+  })
 
 $(document).on('turbolinks:load', ready)
