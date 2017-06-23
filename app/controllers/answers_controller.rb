@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
 
+  after_action :publish_answer, only: [:create]
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
@@ -44,5 +45,32 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:file])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    # renderer = ApplicationController.renderer.new
+    # renderer.instance_variable_set(:@env, {"HTTP_HOST"=>"localhost:3000",
+    #   "HTTPS"=>"off",
+    #   "REQUEST_METHOD"=>"GET",
+    #   "SCRIPT_NAME"=>"",
+    #   "warden" => request.env["warden"]})
+    attachments = []
+    @answer.attachments.each do |a|
+      attachment = {}
+      attachment[:id] = a.id
+      attachment[:url] = a.file.url
+      attachment[:name] = a.file.identifier
+      attachments << attachment
+    end
+    ActionCable.server.broadcast(
+      "question_#{@question.id}/answers",
+      {
+        answer: @answer,
+        attachments: attachments,
+        rating: @answer.sum_votes,
+        question: @question
+      }
+    )
   end
 end

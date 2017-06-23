@@ -60,12 +60,14 @@ feature 'Vote for answer', %q{
 
       scenario 'User can vote then unvote then downvote', js: true  do
         within "#answer-#{answer.id}" do
+          sleep 1
           click_on "Up"
           sleep 1
           click_on "Unvote"
           sleep 1
           click_on "Down"
-          expect(page).to have_content 'Votes: 2'
+          sleep 1
+          expect(page).to have_content 'Votes: 1'
         end
       end
     end
