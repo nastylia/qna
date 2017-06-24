@@ -42,7 +42,7 @@ feature 'Create answer for a question', %q{
             expect(page).to have_content 'Up'
             expect(page).to have_content 'Unvote'
             expect(page).to have_content 'Down'
-            expect(page).to have_link 'Select as the best answer'
+            expect(page).to have_link 'Select as the best answer', visible: false
           end
         end
       end

@@ -9,6 +9,26 @@ ready = ->
     $(@).hide()
     $('form#edit-question').show()
 
+  $('body').on 'click', '#add-comments-question', (e) ->
+    e.preventDefault()
+    $('form.comment-question').show()
+
+  $(document).on 'ajax:success', 'form.comment-question', (e, data, status, xhr) ->
+    comments = '#comments-' + data.commentable_type.toLowerCase() + '-' + data.commentable_id
+    comment_form = '#add-comment-' + data.commentable_type.toLowerCase() + '-' + data.commentable_id
+    $(comments).append("<li>" + data.comment + "</li>")
+    $(comment_form + ">#comment_comment").val("")
+    $(comment_form).hide()
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    error_info =  $.parseJSON(xhr.responseText)
+    $('#error').html(error_info.error)
+  #   vote_id = '#vote-' + data.votable_type.toLowerCase() + '-' + data.votable_id
+  #   $('#error').html('')
+  #   $(vote_id).html(data.result_votes)
+  # .bind 'ajax:error', (e, xhr, status, error) ->
+  #   error_info =  $.parseJSON(xhr.responseText)
+  #   $('#error').html(error_info.error)
+
   App.cable.subscriptions.create('QuestionsChannel', {
     connected: ->
       @perform 'follow'
