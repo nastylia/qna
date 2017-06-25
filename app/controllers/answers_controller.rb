@@ -49,12 +49,6 @@ class AnswersController < ApplicationController
 
   def publish_answer
     return if @answer.errors.any?
-    # renderer = ApplicationController.renderer.new
-    # renderer.instance_variable_set(:@env, {"HTTP_HOST"=>"localhost:3000",
-    #   "HTTPS"=>"off",
-    #   "REQUEST_METHOD"=>"GET",
-    #   "SCRIPT_NAME"=>"",
-    #   "warden" => request.env["warden"]})
     attachments = []
     @answer.attachments.each do |a|
       attachment = {}

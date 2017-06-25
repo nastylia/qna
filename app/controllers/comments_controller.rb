@@ -18,8 +18,6 @@ class CommentsController < ApplicationController
   private
 
   def publish_comment
-    # gon.commentable_type = commentable_name
-    # gon.commentable_id = @commentable.id
 
     return if @comment.errors.any?
 

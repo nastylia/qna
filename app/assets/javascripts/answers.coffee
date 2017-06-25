@@ -33,7 +33,6 @@ ready = ->
     ,
 
     received: (data) ->
-      console.log(data.answer.author_id == gon.user_id)
       return if data.answer.author_id == gon.user_id
       answersList.append(JST["skim_templates/answer"](data))
   })
