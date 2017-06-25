@@ -27,7 +27,6 @@ ready = ->
 
   App.cable.subscriptions.create('AnswersChannel', {
     connected: ->
-      console.log("question_id: " + gon.question_id)
       return unless gon.question_id
       @perform 'follow', question_id: gon.question_id
     ,

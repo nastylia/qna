@@ -3,7 +3,7 @@ ready = ->
   App.cable.subscriptions.create('CommentsChannel', {
     connected: ->
       return unless gon.question_id
-      @perform 'follow'
+      @perform 'follow', question_id: gon.question_id
     ,
 
     received: (data) ->

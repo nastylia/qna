@@ -20,9 +20,10 @@ class CommentsController < ApplicationController
   def publish_comment
 
     return if @comment.errors.any?
+    question_id = @comment.commentable_type == 'Question' ? @comment.commentable.id : @comment.commentable.question.id
 
     ActionCable.server.broadcast(
-      "comments",
+      "question_#{question_id}/comments",
       {
         comment: @comment
       }
