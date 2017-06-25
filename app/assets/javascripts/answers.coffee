@@ -11,6 +11,13 @@ ready = ->
     form = answer.find('.edit_answer')
     form.show()
 
+  $('body').on 'click', '#add-comments-answer', (e) ->
+    e.preventDefault()
+    answer = $(e.target).closest('.answer')
+    form = answer.find('form.comment-answer')
+    console.log(form)
+    $(form).show()
+
   $(document).on 'ajax:success', 'a.up-vote, a.down-vote, a.un-vote', (e, data, status, xhr) ->
     vote_id = '#vote-' + data.votable_type.toLowerCase() + '-' + data.votable_id
     $('#error').html('')

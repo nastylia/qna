@@ -13,7 +13,7 @@ ready = ->
     e.preventDefault()
     $('form.comment-question').show()
 
-  $(document).on 'ajax:success', 'form.comment-question', (e, data, status, xhr) ->
+  $(document).on 'ajax:success', 'form.comment-question, form.comment-answer', (e, data, status, xhr) ->
     comments = '#comments-' + data.commentable_type.toLowerCase() + '-' + data.commentable_id
     comment_form = '#add-comment-' + data.commentable_type.toLowerCase() + '-' + data.commentable_id
     $(comments).append("<li>" + data.comment + "</li>")

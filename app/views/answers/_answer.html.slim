@@ -20,4 +20,6 @@
                 = f.text_area :body
                 = f.submit 'Save'
     = render 'common/votes_links', item_type: 'answer', item: answer
+
+    = render 'common/comments', commentable_type: 'answer', commentable: answer
     p -------------------------------------------------------------------
