@@ -1,0 +1,8 @@
+p
+  = "Comments:"
+  ul id="comments-#{commentable_type}-#{commentable.id}"
+    - commentable.comments.each do |c|
+      li.comment= c.comment
+
+- if user_signed_in?
+  = render 'common/add_comment', commentable_type: commentable_type, commentable: commentable

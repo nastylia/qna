@@ -4,6 +4,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :destroy, :update]
 
+  after_action :publish_question, only: [:create]
+
   def index
     @questions = Question.all
   end
@@ -12,6 +14,7 @@ class QuestionsController < ApplicationController
     @answers = @question.answers
     @answer = Answer.new(question_id: @question.id)
     @answer.attachments.build
+    gon.question_id = @question.id
   end
 
   def new
@@ -28,6 +31,7 @@ class QuestionsController < ApplicationController
     else
       render :new
     end
+    gon.question_id = @question.id
   end
 
   def update
@@ -52,6 +56,23 @@ class QuestionsController < ApplicationController
 
   def load_question
     @question = Question.find(params[:id])
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    renderer = ApplicationController.renderer.new
+    renderer.instance_variable_set(:@env, {"HTTP_HOST"=>"localhost:3000",
+      "HTTPS"=>"off",
+      "REQUEST_METHOD"=>"GET",
+      "SCRIPT_NAME"=>"",
+      "warden" => request.env["warden"]})
+    ActionCable.server.broadcast(
+      'questions',
+      renderer.render(
+        locals: { question: @question },
+        partial: 'questions/question_info'
+      )
+    )
   end
 
   def question_params

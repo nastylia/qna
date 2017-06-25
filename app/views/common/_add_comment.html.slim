@@ -1,0 +1,6 @@
+p id="add-comments-#{commentable_type}"
+  = link_to 'Add comment', '', class: "add-comment-#{commentable_type}-#{commentable.id}"
+  = form_for [commentable, commentable.comments.build], remote: true, method: :post, html: { id: "add-comment-#{commentable_type}-#{commentable.id}", class: "comment-#{commentable_type}" } do |f|
+    = f.label :comment, 'Your comment'
+    = f.text_field :comment
+    = f.submit 'Publish'
