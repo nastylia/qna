@@ -15,7 +15,6 @@ ready = ->
     e.preventDefault()
     answer = $(e.target).closest('.answer')
     form = answer.find('form.comment-answer')
-    console.log(form)
     $(form).show()
 
   $(document).on 'ajax:success', 'a.up-vote, a.down-vote, a.un-vote', (e, data, status, xhr) ->
@@ -34,11 +33,9 @@ ready = ->
     ,
 
     received: (data) ->
-      console.log(data)
+      console.log(data.answer.author_id == gon.user_id)
       return if data.answer.author_id == gon.user_id
       answersList.append(JST["skim_templates/answer"](data))
-
-      # questionsList.append data
   })
 
 $(document).on('turbolinks:load', ready)

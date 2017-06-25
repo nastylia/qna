@@ -22,12 +22,6 @@ ready = ->
   .bind 'ajax:error', (e, xhr, status, error) ->
     error_info =  $.parseJSON(xhr.responseText)
     $('#error').html(error_info.error)
-  #   vote_id = '#vote-' + data.votable_type.toLowerCase() + '-' + data.votable_id
-  #   $('#error').html('')
-  #   $(vote_id).html(data.result_votes)
-  # .bind 'ajax:error', (e, xhr, status, error) ->
-  #   error_info =  $.parseJSON(xhr.responseText)
-  #   $('#error').html(error_info.error)
 
   App.cable.subscriptions.create('QuestionsChannel', {
     connected: ->

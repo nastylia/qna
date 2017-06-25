@@ -21,3 +21,19 @@ div.answer id="answer-#{@answer.id}"
             a data-type='json' rel="nofollow" class='un-vote' data-remote='true' data-method='patch' href="/answers/#{@answer.id}/unvote" Unvote
           td
             a data-type='json' rel="nofollow" class='down-vote' data-remote='true' data-method='patch' href="/answers/#{@answer.id}/down" Down
+
+    p
+      = 'Comments:'
+      ul id="comments-answer-#{@answer.id}"
+
+      - if gon.user_id
+        p id="add-comments-answer"
+          a class="add-comment-answer-#{@answer.id}" href="" Add comment
+
+          form id="add-comment-answer-#{@answer.id}" class="comment-answer" action="/answers/#{@answer.id}/comments" data-remote="true" method="post" style="display: none"
+            label for="comment_comment" = 'Your comment'
+            input type="text" name="comment[comment]" id="comment_comment"
+            input type="submit" name="commit" value="Publish" data-disable-with="Publish"
+
+
+p -------------------------------------------------------------------
