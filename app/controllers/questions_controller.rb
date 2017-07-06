@@ -3,56 +3,61 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :destroy, :update]
+  before_action :build_question, only: [:create]
+  before_action :is_author?, only: [:update, :destroy]
+  before_action :build_answers, only: [:show]
+  before_action :set_gon, only: [:show, :create]
 
   after_action :publish_question, only: [:create]
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answers = @question.answers
-    @answer = Answer.new(question_id: @question.id)
-    @answer.attachments.build
-    gon.question_id = @question.id
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.author_id = current_user.id
-    if @question.save
-      flash[:notice] = 'Your question was successfully created'
-      redirect_to @question
-    else
-      render :new
-    end
-    gon.question_id = @question.id
+    respond_with @question
   end
 
   def update
-    if current_user.author_of?(@question)
-      @question.update(question_params)
-    else
-      head :forbidden
-    end
+    @question.update(question_params)
+    respond_with @question
   end
 
   def destroy
-    if user_signed_in? && current_user.author_of?(@question)
-      @question.destroy
-      flash[:notice] = 'Question was successfully deleted'
-    else
-      flash[:notice] = 'You are not authorized to delete question'
-    end
-    redirect_to questions_path
+    respond_with(@question.destroy)
   end
 
   private
+
+  def set_gon
+    gon.question_id = @question.id
+  end
+
+  def build_question
+    @question = Question.new(question_params)
+    @question.author_id = current_user.id
+    @question.save
+  end
+
+  def build_answers
+    @answers = @question.answers
+    @answer = @question.answers.build
+  end
+
+  def is_author?
+    respond_with (@question) do |format|
+      flash[:notice] = 'You are not authorized to perform this action'
+      format.js { head :forbidden }
+    end unless current_user.author_of?(@question)
+  end
 
   def load_question
     @question = Question.find(params[:id])
