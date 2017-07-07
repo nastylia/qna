@@ -1,18 +1,14 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_commentable
+  before_action :build_comment
 
   after_action :publish_comment, only: [:create]
 
+  respond_to :json
+
   def create
-    @comment = @commentable.comments.create(comment: params[:comment][:comment], user: current_user)
-    respond_to do |format|
-      if @comment
-        format.json { render json: {commentable_id: @comment[:commentable_id],
-                                    commentable_type: @comment[:commentable_type],
-                                    comment: @comment[:comment]}}
-      end
-    end
+    respond_with(@comment, location: @commentable)
   end
 
   private
@@ -28,6 +24,10 @@ class CommentsController < ApplicationController
         comment: @comment
       }
     )
+  end
+
+  def build_comment
+    @comment = @commentable.comments.create(comment: params[:comment][:comment], user: current_user)
   end
 
   def set_commentable
