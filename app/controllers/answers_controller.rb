@@ -3,40 +3,48 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
+  before_action only: [:update, :destroy] do
+    is_author?(item: @answer)
+  end
+  before_action only: [:mark_best] do
+    is_author?(item: @question)
+  end
+  before_action :build_answer, only: [:create]
 
   after_action :publish_answer, only: [:create]
   def create
+    respond_with @answer
+  end
+
+  def update
+    @answer.update(answer_params)
+    respond_with @answer
+  end
+
+  def destroy
+    respond_with(@answer.destroy)
+  end
+
+  def mark_best
+    @answer.select_new_best_answer(@question.answers)
+    respond_with @answer
+  end
+
+  private
+
+  def build_answer
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     @answer.save
   end
 
-  def update
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-    else
-      head :forbidden
-    end
+  def is_author?(item:)
+    respond_with(@answer) do |format|
+      flash[:notice] = 'You are not authorized to perform this action'
+      format.js { head :forbidden }
+    end unless current_user.author_of?(item)
   end
-
-  def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-    else
-      head :forbidden
-    end
-  end
-
-  def mark_best
-    if current_user.author_of?(@question)
-      @answer.select_new_best_answer(@question.answers)
-    else
-      head :forbidden
-    end
-  end
-
-  private
 
   def load_answer_and_question
     @answer = Answer.find(params[:id])

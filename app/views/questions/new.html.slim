@@ -6,5 +6,5 @@
   p
     = f.label :body
     = f.text_area :body
-  p= render 'attachments/add_attachments', f: f
+  p= render 'attachments/add_attachments', f: f, resource: @question
   p= f.submit 'Create'

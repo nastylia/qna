@@ -30,7 +30,7 @@ div.answer id="answer-#{@answer.id}"
         p id="add-comments-answer"
           a class="add-comment-answer-#{@answer.id}" href="" Add comment
 
-          form id="add-comment-answer-#{@answer.id}" class="comment-answer" action="/answers/#{@answer.id}/comments" data-remote="true" method="post" style="display: none"
+          form id="add-comment-answer-#{@answer.id}" class="comment-answer" action="/answers/#{@answer.id}/comments" data-remote="true" data-type="json" method="post" style="display: none"
             label for="comment_comment" = 'Your comment'
             input type="text" name="comment[comment]" id="comment_comment"
             input type="submit" name="commit" value="Publish" data-disable-with="Publish"

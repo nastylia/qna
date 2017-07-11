@@ -1,16 +1,19 @@
 class AttachmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_attachment, only: [:destroy]
+  before_action :load_attachment, :is_author?, only: [:destroy]
 
   def destroy
-    if current_user.author_of?(@item)
-      @attachment.destroy
-    else
-      head :forbidden
-    end
+    respond_with(@attachment.destroy)
   end
 
   private
+
+  def is_author?
+    respond_with (@item) do |format|
+      flash[:notice] = 'You are not authorized to perform this action'
+      format.js { head :forbidden }
+    end unless current_user.author_of?(@item)
+  end
 
   def load_attachment
     @attachment = Attachment.find(params[:id])
