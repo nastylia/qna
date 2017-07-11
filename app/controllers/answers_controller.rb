@@ -3,8 +3,12 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
-  before_action :is_answer_author?, only: [:update, :destroy]
-  before_action :is_question_author?, only: [:mark_best]
+  before_action only: [:update, :destroy] do
+    is_author?(item: @answer)
+  end
+  before_action only: [:mark_best] do
+    is_author?(item: @question)
+  end
   before_action :build_answer, only: [:create]
 
   after_action :publish_answer, only: [:create]
@@ -33,14 +37,6 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     @answer.save
-  end
-
-  def is_question_author?
-    is_author?(item: @question)
-  end
-
-  def is_answer_author?
-    is_author?(item: @answer)
   end
 
   def is_author?(item:)
