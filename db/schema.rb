@@ -10,20 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170624100910) do
+ActiveRecord::Schema.define(version: 20170712085856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answers", force: :cascade do |t|
     t.text     "body"
-    t.boolean  "best_answer",  default: false
+    t.boolean  "best_answer", default: false
     t.integer  "question_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "author_id"
-    t.integer  "votes",        default: 0
-    t.integer  "result_votes", default: 0
     t.index ["author_id"], name: "index_answers_on_author_id", using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
   end
@@ -49,12 +47,20 @@ ActiveRecord::Schema.define(version: 20170624100910) do
   create_table "questions", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "author_id"
-    t.integer  "votes",        default: 0
-    t.integer  "result_votes", default: 0
     t.index ["author_id"], name: "index_questions_on_author_id", using: :btree
+  end
+
+  create_table "social_networks", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_social_networks_on_provider_and_uid", using: :btree
+    t.index ["user_id"], name: "index_social_networks_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -86,4 +92,5 @@ ActiveRecord::Schema.define(version: 20170624100910) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users", column: "author_id"
   add_foreign_key "questions", "users", column: "author_id"
+  add_foreign_key "social_networks", "users"
 end
