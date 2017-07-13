@@ -46,6 +46,56 @@ RSpec.describe User do
     end
 
     context 'user has no social network' do
+
+      context 'provider did not return email' do
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', info: { email: '' }) }
+
+        it 'returns nil user' do
+          expect(User.find_for_oauth(auth).id).to eq nil
+        end
+
+        it 'does not create social network' do
+          expect { User.find_for_oauth(auth) }.to_not change(SocialNetwork, :count)
+        end
+        
+        it 'does not create user' do
+          expect { User.find_for_oauth(auth) }.to_not change(User, :count)
+        end
+      end
+
+      context 'user is going to confirm new email' do
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', info: { email: 'test@email.com' }, confirmation: true) }
+
+        it 'returns user' do
+          expect(User.find_for_oauth(auth)).to be_a(User)
+        end
+
+        it 'creates social network' do
+          expect { User.find_for_oauth(auth) }.to change(SocialNetwork, :count).by(1)
+        end
+
+        it 'creates social network with uid and provider' do
+          social_network = User.find_for_oauth(auth).social_networks.first
+
+          expect(social_network.provider).to eq auth.provider
+          expect(social_network.uid).to eq auth.uid.to_s
+        end
+
+        it 'creates user' do
+          expect { User.find_for_oauth(auth) }.to change(User, :count).by(1)
+        end
+
+        it 'creates user with e-mail' do
+          user = User.find_for_oauth(auth)
+          expect(user.email).to eq 'test@email.com'
+        end
+
+        it 'creates unconfirmed user' do
+          user = User.find_for_oauth(auth)
+          expect(user.confirmed?).to be false
+        end
+      end
+
       context 'user already exists' do
         let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456', info: { email: user.email }) }
         it 'does not create new user' do
@@ -58,7 +108,7 @@ RSpec.describe User do
 
         it 'creates social_network with provider and uid' do
           social_network = User.find_for_oauth(auth).social_networks.first
-          
+
           expect(social_network.provider).to eq auth.provider
           expect(social_network.uid).to eq auth.uid.to_s
         end

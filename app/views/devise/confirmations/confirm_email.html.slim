@@ -1,0 +1,5 @@
+p Confirm your e-mail:
+= form_tag confirm_email_path, method: :post do
+  = label_tag :email, 'Your e-mail'
+  = text_field_tag :email
+  = submit_tag 'Confirm'

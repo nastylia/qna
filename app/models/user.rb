@@ -1,9 +1,11 @@
 class User < ApplicationRecord
+  TEMP_EMAIL_PREFIX = "change@me"
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, omniauth_providers: [:facebook]
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable,
+         :omniauthable, omniauth_providers: [:facebook, :twitter]
+
   has_many :questions, foreign_key: :author_id
   has_many :answers, foreign_key: :author_id
 
@@ -23,7 +25,9 @@ class User < ApplicationRecord
     user = User.where(email: email).first
     unless user
       password = Devise.friendly_token[0, 20]
-      user = User.create!(email: email, password: password, password_confirmation: password)
+      user = User.new(email: email, password: password, password_confirmation: password)
+      user.skip_confirmation! unless auth[:confirmation]
+      return user unless user.save
     end
     user.social_networks.create(provider: auth.provider, uid: auth.uid)
     user

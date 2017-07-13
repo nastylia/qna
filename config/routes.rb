@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: :destroy
+  devise_scope :user do
+    post :confirm_email, action: :confirm_email, controller: 'omniauth_callbacks'
+  end
 
   root to: "questions#index"
 
