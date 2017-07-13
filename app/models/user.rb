@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  TEMP_EMAIL_PREFIX = "change@me"
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
