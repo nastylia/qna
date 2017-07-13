@@ -11,6 +11,7 @@ feature 'User authorization via social networks', %q{
   end
 
   scenario 'Non-registered user tries to sign up via twitter' do
+    twitter_mock
     visit new_user_session_path
     expect(page).to have_content('Sign in with Twitter')
     click_on 'Sign in with Twitter'
