@@ -42,7 +42,11 @@ gem 'cocoon'
 gem 'skim'
 gem 'gon'
 
-gem 'responders', '~> 2.0' 
+gem 'responders', '~> 2.0'
+
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -58,6 +62,10 @@ group :development, :test do
   gem 'database_cleaner'
 
   gem 'capybara-webkit'
+
+  gem 'letter_opener'
+
+  gem 'capybara-email'
 end
 
 group :test do
