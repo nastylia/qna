@@ -17,16 +17,7 @@ module Voted
 
   def unvote
     vote = @votable.unvote(current_user: current_user)
-    respond_to do |format|
-      if vote
-        format.json { render json: { votable_type: vote.votable_type,
-                                     votable_id: vote.votable_id,
-                                     result_votes: @votable.votes.sum(:value) } }
-      else
-        format.json { render json: { error: "Vote first" },
-                             status: :forbidden }
-      end
-    end
+    vote_message(vote)
   end
 
   private
@@ -48,8 +39,12 @@ module Voted
   end
 
   def vote(value)
+    vote = @votable.vote(value: value, current_user: current_user)
+    vote_message(vote)
+  end
+
+  def vote_message(vote)
     respond_to do |format|
-      vote = @votable.vote(value: value, current_user: current_user)
       if vote
         format.json { render json: { votable_type: vote.votable_type,
                                        votable_id: vote.votable_id,

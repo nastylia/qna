@@ -33,8 +33,9 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    binding.pry
-    respond_with(@question.destroy)
+    respond_with(@question.destroy) do |format|
+      format.js { redirect_to questions_path }
+    end
   end
 
   private
