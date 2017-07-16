@@ -4,7 +4,6 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :destroy, :update]
   before_action :build_question, only: [:create]
-  # before_action :is_author?, only: [:update, :destroy]
   before_action :build_answers, only: [:show]
   before_action :set_gon, only: [:show, :create]
 
@@ -54,13 +53,6 @@ class QuestionsController < ApplicationController
     @answers = @question.answers
     @answer = @question.answers.build
   end
-
-  # def is_author?
-  #   respond_with (@question) do |format|
-  #     flash[:notice] = 'You are not authorized to perform this action'
-  #     format.js { head :forbidden }
-  #   end unless current_user.author_of?(@question)
-  # end
 
   def load_question
     @question = Question.find(params[:id])

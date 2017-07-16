@@ -10,13 +10,6 @@ class AttachmentsController < ApplicationController
 
   private
 
-  # def is_author?
-  #   respond_with (@item) do |format|
-  #     flash[:notice] = 'You are not authorized to perform this action'
-  #     format.js { head :forbidden }
-  #   end unless current_user.author_of?(@item)
-  # end
-
   def load_attachment
     @attachment = Attachment.find(params[:id])
     @item = @attachment.attachable

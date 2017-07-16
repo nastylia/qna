@@ -4,7 +4,6 @@ FactoryGirl.define do
   end
 
   factory :my_comment, class: Comment do
-    # binding.pry
     comment
     user
     trait :question do

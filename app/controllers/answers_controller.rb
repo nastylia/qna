@@ -3,9 +3,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
-  # before_action only: [:update, :destroy] do
-  #   is_author?(item: @answer)
-  # end
+
   before_action :authorize_mark_best, only: [:mark_best]
 
   before_action :build_answer, only: [:create]
@@ -44,13 +42,6 @@ class AnswersController < ApplicationController
     @answer.author = current_user
     @answer.save
   end
-
-  # def is_author?(item:)
-  #   respond_with(@answer) do |format|
-  #     flash[:notice] = 'You are not authorized to perform this action'
-  #     format.js { head :forbidden }
-  #   end unless current_user.author_of?(item)
-  # end
 
   def load_answer_and_question
     @answer = Answer.find(params[:id])

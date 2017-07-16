@@ -29,8 +29,6 @@ class ApplicationController < ActionController::Base
         end
       }
     end
-    # redirect_to root_url, alert: exception.message
-    #render...
   end
 
 
