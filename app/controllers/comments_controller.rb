@@ -7,6 +7,8 @@ class CommentsController < ApplicationController
 
   respond_to :json
 
+  authorize_resource
+
   def create
     respond_with(@comment, location: @commentable)
   end

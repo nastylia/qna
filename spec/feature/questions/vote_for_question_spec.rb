@@ -101,7 +101,7 @@ feature 'Vote for question', %q{
           click_on "Up"
           expect(page).to have_content 'Votes: 2'
         end
-        expect(page).to have_content 'You are the author of the Question. You cannot vote.'
+        expect(page).to have_content 'You are the author of the question. You cannot vote.'
       end
 
       scenario 'Author cannot down vote his question', js: true do
@@ -109,7 +109,7 @@ feature 'Vote for question', %q{
           click_on "Down"
           expect(page).to have_content 'Votes: 2'
         end
-        expect(page).to have_content 'You are the author of the Question. You cannot vote.'
+        expect(page).to have_content 'You are the author of the question. You cannot down vote.'
       end
 
     end

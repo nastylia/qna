@@ -7,18 +7,20 @@
       = answer.body
       = render 'attachments/show_attachments', item: answer
 
-    - if user_signed_in? && current_user.author_of?(answer)
+    - if user_signed_in?
       p.links
         table
           tr
-            td
-              = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
-            td
-              = link_to 'Edit', '', class: 'edit-answer-link'
-              = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-                = f.label :body, 'Answer'
-                = f.text_area :body
-                = f.submit 'Save'
+            -if can?(:destroy, answer, user: current_user)
+              td
+                = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+            -if can?(:update, answer, user: current_user)
+              td
+                = link_to 'Edit', '', class: 'edit-answer-link'
+                = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+                  = f.label :body, 'Answer'
+                  = f.text_area :body
+                  = f.submit 'Save'
     = render 'common/votes_links', item_type: 'answer', item: answer
 
     = render 'common/comments', commentable_type: 'answer', commentable: answer

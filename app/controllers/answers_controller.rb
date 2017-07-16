@@ -3,15 +3,17 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
-  before_action only: [:update, :destroy] do
-    is_author?(item: @answer)
-  end
-  before_action only: [:mark_best] do
-    is_author?(item: @question)
-  end
+  # before_action only: [:update, :destroy] do
+  #   is_author?(item: @answer)
+  # end
+  before_action :authorize_mark_best, only: [:mark_best]
+
   before_action :build_answer, only: [:create]
 
   after_action :publish_answer, only: [:create]
+
+  authorize_resource
+
   def create
     respond_with @answer
   end
@@ -32,6 +34,10 @@ class AnswersController < ApplicationController
 
   private
 
+  def authorize_mark_best
+    authorize! :mark_best, @answer, user: current_user
+  end
+
   def build_answer
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
@@ -39,12 +45,12 @@ class AnswersController < ApplicationController
     @answer.save
   end
 
-  def is_author?(item:)
-    respond_with(@answer) do |format|
-      flash[:notice] = 'You are not authorized to perform this action'
-      format.js { head :forbidden }
-    end unless current_user.author_of?(item)
-  end
+  # def is_author?(item:)
+  #   respond_with(@answer) do |format|
+  #     flash[:notice] = 'You are not authorized to perform this action'
+  #     format.js { head :forbidden }
+  #   end unless current_user.author_of?(item)
+  # end
 
   def load_answer_and_question
     @answer = Answer.find(params[:id])
