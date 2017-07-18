@@ -1,15 +1,16 @@
-- if user_signed_in? && current_user.author_of?(@question)
-  p
-    = link_to 'Delete question', question_path(@question), method: :delete, remote: true
-    = ', '
-    = link_to 'Edit question', '', class: 'edit-question-link'
-  p
-    = form_for @question, remote: true, html: { id: 'edit-question' } do |f|
-      = f.label :title
-      = f.text_field :title
-      = f.label :body
-      = f.text_area :body
-      = f.submit 'Save'
+- if user_signed_in?
+  - if can?(:destroy, @question, user: current_user)
+    p
+      = link_to 'Delete question', question_path(@question), method: :delete, remote: true
+  - if can?(:update, @question, user: current_user)
+    p
+      = link_to 'Edit question', '', class: 'edit-question-link'
+      = form_for @question, remote: true, html: { id: 'edit-question' } do |f|
+        = f.label :title
+        = f.text_field :title
+        = f.label :body
+        = f.text_area :body
+        = f.submit 'Save'
 
 p Question name: #{@question.title}
 p Question body: #{@question.body}

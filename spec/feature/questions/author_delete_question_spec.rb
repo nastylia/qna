@@ -13,7 +13,7 @@ feature 'Author can delete it\'s questions', %q{
   given!(:answers) { create_list(:answer, 3, question: question_author1) }
   given!(:answers) { create_list(:answer, 3, question: question_author2) }
 
-  
+
   scenario 'Author can delete it\'s questions' do
     sign_in(author1)
 

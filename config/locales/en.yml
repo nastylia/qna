@@ -21,3 +21,10 @@
 
 en:
   hello: "Hello world"
+  unauthorized:
+    up:
+      all: You are the author of the %{subject}. You cannot vote.
+    down:
+      all: You are the author of the %{subject}. You cannot  down vote.
+    unvote:
+      all: You are the author of the %{subject}. You cannot unvote.
