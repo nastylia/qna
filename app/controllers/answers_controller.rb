@@ -3,11 +3,8 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_answer_and_question, only: [:destroy, :update, :mark_best]
-
   before_action :authorize_mark_best, only: [:mark_best]
-
   before_action :build_answer, only: [:create]
-
   after_action :publish_answer, only: [:create]
 
   authorize_resource
