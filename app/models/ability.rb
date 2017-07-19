@@ -39,5 +39,7 @@ class Ability
     can :me, User do |u|
       u[:user] == user
     end
+
+    can :all_but_me, User
   end
 end

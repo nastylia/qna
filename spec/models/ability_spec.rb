@@ -83,5 +83,8 @@ describe Ability do
 
     it { should be_able_to :me, user: user }
     it { should_not be_able_to :me, user: other }
+
+    it { should be_able_to :all_but_me, user: user }
+    it { should be_able_to :all_but_me, user: other }
   end
 end
