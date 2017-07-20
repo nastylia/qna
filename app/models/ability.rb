@@ -35,5 +35,8 @@ class Ability
     can [:up, :down, :unvote], [Question, Answer] do |votable|
       !user.author_of?(votable)
     end
+
+    can :me, User, id: user.id
+    can :index, User
   end
 end

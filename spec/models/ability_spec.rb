@@ -76,4 +76,15 @@ describe Ability do
     it { should_not be_able_to :mark_best, other_answer, user: user }
 
   end
+
+  describe 'API' do
+    let(:user) { create(:user) }
+    let(:other) { create(:user) }
+
+    it { should be_able_to :me, user }
+    it { should_not be_able_to :me, other }
+
+    it { should be_able_to :index, user }
+    it { should be_able_to :index, other }
+  end
 end
