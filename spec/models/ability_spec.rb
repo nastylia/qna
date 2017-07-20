@@ -81,10 +81,10 @@ describe Ability do
     let(:user) { create(:user) }
     let(:other) { create(:user) }
 
-    it { should be_able_to :me, user: user }
-    it { should_not be_able_to :me, user: other }
+    it { should be_able_to :me, user }
+    it { should_not be_able_to :me, other }
 
-    it { should be_able_to :all_but_me, user: user }
-    it { should be_able_to :all_but_me, user: other }
+    it { should be_able_to :index, user }
+    it { should be_able_to :index, other }
   end
 end

@@ -2,15 +2,15 @@ require 'rails_helper'
 
 describe 'Profile API' do
 
-  describe 'GET /all_but_me' do
+  describe 'GET /' do
     context 'unauthorized' do
       it 'returns 401 status if there is no access token' do
-        get '/api/v1/profiles/all_but_me', format: :json
+        get '/api/v1/profiles', format: :json
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if access tokenis not valid' do
-        get '/api/v1/profiles/all_but_me', format: :json, access_token: '12345'
+        get '/api/v1/profiles', format: :json, access_token: '12345'
         expect(response.status).to eq 401
       end
     end
@@ -20,7 +20,7 @@ describe 'Profile API' do
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
       let!(:users) { create_list(:user, 3) }
 
-      before { get '/api/v1/profiles/all_but_me', format: :json, access_token: access_token.token }
+      before { get '/api/v1/profiles', format: :json, access_token: access_token.token }
 
       it 'returns 200 status' do
         expect(response).to be_success

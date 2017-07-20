@@ -36,10 +36,7 @@ class Ability
       !user.author_of?(votable)
     end
 
-    can :me, User do |u|
-      u[:user] == user
-    end
-
-    can :all_but_me, User
+    can :me, User, id: user.id
+    can :index, User
   end
 end
