@@ -45,9 +45,7 @@ class QuestionsController < ApplicationController
   end
 
   def build_question
-    @question = Question.new(question_params)
-    @question.author_id = current_user.id
-    @question.save
+    @question = current_user.questions.create(question_params)
   end
 
   def build_answers
