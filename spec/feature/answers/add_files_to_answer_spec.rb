@@ -5,7 +5,7 @@ feature 'Add files to answer', %q{
   As an answer author
   I want to be able to attach files
 } do
-  
+
   given(:user) { create(:user) }
   given(:question) { create(:question_author, author: user) }
 
@@ -20,7 +20,7 @@ feature 'Add files to answer', %q{
     click_on 'Post Your Answer'
 
     within '.answers' do
-      expect(page).to have_link 'test1', href: "/uploads/attachment/file/1/test1"
+      expect(page).to have_link 'test1', href: "/uploads/attachment/file/#{question.answers.first.attachments.first.id}/test1"
     end
   end
 
@@ -38,9 +38,9 @@ feature 'Add files to answer', %q{
       expect(page).to have_link 'test2', href: "/uploads/attachment/file/2/test2"
       expect(page).to have_link 'test1', href: "/uploads/attachment/file/1/test1"
     end
-    
+
   end
 
 
-  
+
 end

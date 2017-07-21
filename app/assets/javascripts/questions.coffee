@@ -14,9 +14,9 @@ ready = ->
     $('form.comment-question').show()
 
   $(document).on 'ajax:success', 'form.comment-question, form.comment-answer', (e, data, status, xhr) ->
-    comments = '#comments-' + data.commentable_type.toLowerCase() + '-' + data.commentable_id
-    comment_form = '#add-comment-' + data.commentable_type.toLowerCase() + '-' + data.commentable_id
-    $(comments).append("<li>" + data.comment + "</li>")
+    comments = '#comments-' + data.comment.commentable_type.toLowerCase() + '-' + data.comment.commentable_id
+    comment_form = '#add-comment-' + data.comment.commentable_type.toLowerCase() + '-' + data.comment.commentable_id
+    $(comments).append("<li>" + data.comment.comment + "</li>")
     $(comment_form + ">#comment_comment").val("")
     $(comment_form).hide()
   .bind 'ajax:error', (e, xhr, status, error) ->
