@@ -40,7 +40,4 @@ feature 'Add files to answer', %q{
     end
 
   end
-
-
-
 end
