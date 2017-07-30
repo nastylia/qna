@@ -17,11 +17,13 @@ ActiveRecord::Schema.define(version: 20170718114439) do
 
   create_table "answers", force: :cascade do |t|
     t.text     "body"
-    t.boolean  "best_answer", default: false
+    t.boolean  "best_answer",  default: false
     t.integer  "question_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "author_id"
+    t.integer  "votes",        default: 0
+    t.integer  "result_votes", default: 0
     t.index ["author_id"], name: "index_answers_on_author_id", using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
   end
@@ -85,9 +87,11 @@ ActiveRecord::Schema.define(version: 20170718114439) do
   create_table "questions", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "author_id"
+    t.integer  "votes",        default: 0
+    t.integer  "result_votes", default: 0
     t.index ["author_id"], name: "index_questions_on_author_id", using: :btree
   end
 
