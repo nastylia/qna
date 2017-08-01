@@ -1,6 +1,4 @@
-require 'rails_helper'
-
-shared_examples 'voted' do
+shared_examples 'Voted' do
   let(:controller) { described_class }
   let(:votable_type) { controller.to_s.match(/(.*)Controller/)[1].singularize }
 
